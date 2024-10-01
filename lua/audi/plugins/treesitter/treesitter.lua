@@ -43,6 +43,9 @@ return {
       },
       indent = { enable = true
       },
+      rainbow = {
+        enable = false,
+      },
       incremental_selection = {
         enable = true,
         keymaps = {

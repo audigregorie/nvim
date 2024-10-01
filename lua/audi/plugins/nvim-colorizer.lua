@@ -7,6 +7,10 @@ return {
       -- mode = "foreground",
       -- mode = "background",
       mode = "virtualtext",
+      filetypes = {
+        "!jsx",  -- Exclude JSX
+        "!html", -- Exclude HTML
+      }
     },
   },
 }

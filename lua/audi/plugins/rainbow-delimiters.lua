@@ -4,7 +4,9 @@ return {
   config = function()
     require("rainbow-delimiters.setup").setup({
       blacklist = {
-        "html"
+        "html",
+        "javascriptreact",
+        "typescriptreact",
       },
       highlight = {
         "RainbowDelimiterRed",

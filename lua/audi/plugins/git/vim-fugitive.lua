@@ -29,7 +29,7 @@ return {
       -- Key mapping to go to previous hunk
       vim.keymap.set(
         "n",
-        "<leader>gp",
+        "<leader>fp",
         require("gitsigns").prev_hunk,
         { buffer = bufnr, desc = "[G]o to [P]revious Hunk"
         }
@@ -37,17 +37,9 @@ return {
       -- Key mapping to go to next hunk
       vim.keymap.set(
         "n",
-        "<leader>gn",
+        "<leader>fn",
         require("gitsigns").next_hunk,
         { buffer = bufnr, desc = "[G]o to [N]ext Hunk"
-        }
-      )
-      -- Key mapping to preview hunk
-      vim.keymap.set(
-        "n",
-        "<leader>ph",
-        require("gitsigns").preview_hunk,
-        { buffer = bufnr, desc = "[P]review [H]unk"
         }
       )
     end,

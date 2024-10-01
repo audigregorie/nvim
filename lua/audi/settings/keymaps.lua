@@ -1,6 +1,7 @@
 -- ========================================
 -- # CONFIGURE KEYMAPS
 -- ========================================
+
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 -- Sets <space> as the global leader key for general mappings
 vim.g.mapleader = " "

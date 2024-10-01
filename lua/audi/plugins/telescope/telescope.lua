@@ -156,5 +156,11 @@ return {
     -- Enable telescope extension for nvim-notify
     pcall(require("telescope").load_extension, "notify")
     vim.keymap.set("n", "<leader>nt", ":Telescope notify<CR>", { desc = "Telescope [N]otifications" })
+
+    -- Enable telescope extension for git worktrees
+    pcall(require("telescope").load_extension("git_worktree"))
+    vim.keymap.set("n", "<leader>wt", ":lua require('telescope').extensions.git_worktree.git_worktrees()<CR>", slient)
+    vim.keymap.set("n", "<leader>wc", ":lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>",
+      slient)
   end,
 }

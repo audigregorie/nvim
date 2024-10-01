@@ -15,8 +15,9 @@ return {
         "mason",
         "notify",
         "oil",
+        "jsx",
+        "html"
       },
     },
   },
-  -- main = "ibl",
 }

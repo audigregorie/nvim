@@ -11,10 +11,7 @@ return {
     "onsails/lspkind.nvim",
     "windwp/nvim-ts-autotag",
     "windwp/nvim-autopairs",
-    {
-      "L3MON4D3/LuaSnip",
-      -- version = "v2.3",
-    },
+     "L3MON4D3/LuaSnip", -- version = "v2.3",
   },
   config = function()
     local cmp = require("cmp")
