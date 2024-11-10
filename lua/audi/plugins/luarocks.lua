@@ -4,10 +4,13 @@ return {
   config = true,
   opts = {
     rocks = {
-      "lua-curl",
-      "nvim-nio",
-      "mimetypes",
-      "xml2lua"
+      enabled = true,
+      hererocks = true, -- Enable hererocks to use Lua 5.1
+
+      "lua-curl",       -- For HTTP requests
+      "nvim-nio",       -- Async I/O
+      "mimetypes",      -- For handling file types
+      "xml2lua",        -- XML parsing in Lua
     }
-  }
+  },
 }

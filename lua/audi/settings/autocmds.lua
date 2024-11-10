@@ -43,6 +43,17 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 
+-- #  Markdown Code Highlighting
+-- ========================================
+vim.api.nvim_create_autocmd({ "FileType", "ColorScheme" }, {
+  pattern = { "markdown" },
+  callback = function()
+    vim.api.nvim_set_hl(0, "markdownCode", { bg = "#2A3542" })
+    vim.api.nvim_set_hl(0, "markdownCodeBlock", { bg = "#2A3542" })
+  end,
+})
+
+
 -- # Highlighting
 -- ========================================
 -- Comment colors
@@ -55,13 +66,61 @@ vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#0A0F14" })
 -- NvimTree colors
 vim.api.nvim_set_hl(0, "NvimTreeOpenedFolderName", { fg = "#008080" })
 
--- Git fugitive diff colors
-vim.api.nvim_set_hl(0, "diffAdded", { ctermfg = "green", fg = "#00ff00" })
-vim.api.nvim_set_hl(0, "diffRemoved", { ctermfg = "red", fg = "#ff0000" })
+
+-- # Markdown Heading Highlighting
+-- ========================================
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.cmd([[
+      highlight MarkdownH1 guifg=#FF5733 gui=bold
+      highlight MarkdownH2 guifg=#3357FF gui=bold
+      highlight MarkdownH3 guifg=#33FF57 gui=bold
+      highlight MarkdownH4 guifg=#FF33A1 gui=bold
+      highlight MarkdownH5 guifg=#33FFF7 gui=bold
+      highlight MarkdownH6 guifg=#F7FF33 gui=bold
+
+      syntax match MarkdownH1 /^# .*/ containedin=ALL
+      syntax match MarkdownH2 /^## .*/ containedin=ALL
+      syntax match MarkdownH3 /^### .*/ containedin=ALL
+      syntax match MarkdownH4 /^#### .*/ containedin=ALL
+      syntax match MarkdownH5 /^##### .*/ containedin=ALL
+      syntax match MarkdownH6 /^###### .*/ containedin=ALL
+
+      highlight link markdownH1 MarkdownH1
+      highlight link markdownH2 MarkdownH2
+      highlight link markdownH3 MarkdownH3
+      highlight link markdownH4 MarkdownH4
+      highlight link markdownH5 MarkdownH5
+      highlight link markdownH6 MarkdownH6
+    ]])
+  end,
+})
+
+
+
 
 
 
 -- Unused configurations
+-- ========================================
+-- Set code block color in markdown
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "markdown",
+--   callback = function()
+--     vim.api.nvim_set_hl(0, "MarkdownCodeBlock", { bg = "#FFFFFF" })
+--     vim.api.nvim_set_hl(0, "MarkdownCode", { bg = "#FFFFFF" })
+--   end,
+-- })
+
+
+-- Git fugitive diff colors
+-- vim.api.nvim_set_hl(0, "DiffAdded", { bg = "green", })
+-- vim.api.nvim_set_hl(0, "DiffRemoved", { bg = "red", })
+-- vim.api.nvim_set_hl(0, "DiffChange", { bg = "lightblue", })
+-- vim.api.nvim_set_hl(0, "DiffText", { bg = "yellow", })
+
+
 ---- Autocmd to highlight yanked text
 --vim.api.nvim_create_autocmd("TextYankPost", {
 --  group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
@@ -101,4 +160,3 @@ vim.api.nvim_set_hl(0, "diffRemoved", { ctermfg = "red", fg = "#ff0000" })
 
 -- -- NvimTree highlight
 -- vim.api.nvim_set_hl(0, "NvimTreeOpenedFolderName", { fg = "#3D94FF" })
-

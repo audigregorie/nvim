@@ -244,3 +244,16 @@ vim.keymap.set("n", "#", "#zz", { noremap = true, silent = true })
 
 -- Keymap to show the full file path
 vim.api.nvim_set_keymap('n', '<leader>fp', ':echo expand("%:p")<CR>', { noremap = true, silent = true })
+
+
+-- Toggle boolean
+local function toggle_boolean()
+  local word = vim.fn.expand("<cword>")
+  if word == "true" then
+    vim.cmd("normal! ciwfalse")
+  elseif word == "false" then
+    vim.cmd("normal! ciwtrue")
+  end
+end
+
+vim.keymap.set("n", "<leader>`", toggle_boolean, { noremap = true, silent = true, desc = "Toggle true/false" })

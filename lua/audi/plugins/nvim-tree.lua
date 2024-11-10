@@ -114,7 +114,7 @@ return {
       },
       filters = {
         -- show hidden files using 'shift + h'
-        dotfiles = false,
+        dotfiles = true,
         custom = { 'dist' },
       },
     })

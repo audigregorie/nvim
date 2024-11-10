@@ -7,6 +7,12 @@ return {
     "SymbolsOutlineClose"
   },
   config = function()
+    local ok, symbols_outline = pcall(require, "symbols-outline")
+    if not ok then
+      vim.notify("symbols-outline.nvim failed to load")
+      return
+    end
+
     require("symbols-outline").setup({
       symbols = {
         File = { icon = "", hl = "@text.uri"

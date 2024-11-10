@@ -1,4 +1,3 @@
--- <> Wilder
 return {
   "gelguy/wilder.nvim",
   keys = {
@@ -12,54 +11,41 @@ return {
   config = function()
     local wilder = require("wilder")
     local macchiato = require("catppuccin.palettes").get_palette("macchiato")
+    local config_colors = { background = '#151921' }
 
-    -- Create a highlight group for the popup menu
-    local text_highlight =
-        wilder.make_hl("WilderText",
-          {
-            { a = 1
-            },
-            { a = 1
-            },
-            { foreground = macchiato.text
-            }
-          })
-    local mauve_highlight =
-        wilder.make_hl("WilderMauve",
-          {
-            { a = 1
-            },
-            { a = 1
-            },
-            { foreground = macchiato.mauve
-            }
-          })
+    -- Create a highlight group for the popup menu with custom background
+    local text_highlight = wilder.make_hl("WilderText", {
+      { a = 1 },
+      { a = 1 },
+      { foreground = macchiato.text, background = config_colors.background },
+    })
+
+    local mauve_highlight = wilder.make_hl("WilderMauve", {
+      { a = 1 },
+      { a = 1 },
+      { foreground = macchiato.mauve, background = config_colors.background },
+    })
 
     -- Enable wilder when pressing : , / or ?
     wilder.setup({
-      modes = {
-        ":",
-        "/",
-        "?"
-      }
+      modes = { ":", "/", "?" }
     })
 
     -- Enable fuzzy matching for commands and buffers
-    wilder.set_option("pipeline",
-      {
-        wilder.branch(
-          wilder.cmdline_pipeline({
-            fuzzy = 1,
-          }),
-          wilder.vim_search_pipeline({
-            fuzzy = 1,
-          })
-        ),
-      })
+    wilder.set_option("pipeline", {
+      wilder.branch(
+        wilder.cmdline_pipeline({
+          fuzzy = 1,
+        }),
+        wilder.vim_search_pipeline({
+          fuzzy = 1,
+        })
+      ),
+    })
 
-    wilder.set_option(
-      "renderer",
-      wilder.popupmenu_renderer(wilder.popupmenu_border_theme({
+    -- Customize the popup renderer with the background color
+    wilder.set_option("renderer", wilder.popupmenu_renderer(
+      wilder.popupmenu_border_theme({
         highlighter = wilder.basic_highlighter(),
         highlights = {
           default = text_highlight,
@@ -71,13 +57,11 @@ return {
         min_height = "25%",
         max_height = "25%",
         border = "rounded",
-        left = {
-          " ", wilder.popupmenu_devicons()
-        },
-        right = {
-          " ", wilder.popupmenu_scrollbar()
-        },
-      }))
-    )
+        left = { " ", wilder.popupmenu_devicons() },
+        right = { " ", wilder.popupmenu_scrollbar() },
+        -- Set the background color for the popup
+        background = config_colors.background,
+      })
+    ))
   end,
 }

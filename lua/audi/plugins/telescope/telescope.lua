@@ -1,12 +1,8 @@
--- <> Telescope
 return {
-  -- Fuzzy Finder (files, lsp, etc)
   "nvim-telescope/telescope.nvim",
   branch = "0.1.x",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    -- Fuzzy Finder Algorithm which requires local dependencies to be built.
-    -- Only load if `make` is available. Make sure you have the system requirements installed.
     {
       "nvim-telescope/telescope-fzf-native.nvim",
       build = "make",
@@ -22,7 +18,13 @@ return {
   },
 
   config = function()
-    require("telescope").setup({
+    local telescope_ok, telescope = pcall(require, "telescope")
+    if not telescope_ok then
+      vim.notify("Telescope not found!", vim.log.levels.ERROR)
+      return
+    end
+
+    telescope.setup({
       defaults = {
         layout_strategy = "horizontal",
         -- layout_config = {
@@ -52,68 +54,14 @@ return {
           },
         },
       },
+
       pickers = {
         find_files = {
-          -- theme = "ivy",
-        },
-        buffer = {
           sort_mru = true,
+          find_command = { "fd", "--type", "f", "--exclude", "node_modules" },
         },
-        grep_string = {
-          word_match = "-w",
-        },
-      },
-      extensions = {
-        file_browser = {
-          mappings = {
-            i = {
-              ["<C-n>"] = function()
-                require("telescope").extensions.file_browser.actions.create()
-              end,
-              ["<C-r>"] = function()
-                require("telescope").extensions.file_browser.actions.rename()
-              end,
-              ["<C-l>"] = function()
-                require("telescope").extensions.file_browser.actions.change_cwd()
-              end,
-              ["<C-h>"] = function()
-                require("telescope").extensions.file_browser.actions.goto_parent_dir()
-              end,
-              ["<C-.>"] = function()
-                require("telescope").extensions.file_browser.actions.toggle_hidden()
-              end,
-              ["<C-x>"] = function()
-                require("telescope").extensions.file_browser.actions.remove()
-              end,
-            },
-            n = {
-              ["<C-n>"] = function()
-                require("telescope").extensions.file_browser.actions.create()
-              end,
-              ["<C-r>"] = function()
-                require("telescope").extensions.file_browser.actions.rename()
-              end,
-              ["l"] = function()
-                require("telescope").extensions.file_browser.actions.change_cwd()
-              end,
-              ["h"] = function()
-                require("telescope").extensions.file_browser.actions.goto_parent_dir()
-              end,
-              ["<C-.>"] = function()
-                require("telescope").extensions.file_browser.actions.toggle_hidden()
-              end,
-              ["<C-x>"] = function()
-                require("telescope").extensions.file_browser.actions.remove()
-              end,
-            },
-          },
-        },
-        bookmarks = {
-          selected_browser = "brave",
-        },
-        ["ui-select"] = {
-          require("telescope.themes").get_dropdown({}),
-        },
+        buffer = { sort_mru = true, },
+        grep_string = { word_match = "-w", },
       },
     })
 
@@ -134,33 +82,5 @@ return {
       { desc = "[D]ocument [S]ymbols" })
     vim.keymap.set("n", "<leader>qf", require("telescope.builtin").quickfix, { desc = "[Q]uick [F]ix" })
     vim.keymap.set("n", "<leader>gb", require("telescope.builtin").git_bcommits, { desc = "[G]it [B]commits" })
-
-    -- Enable telescope fzf native, if installed
-    pcall(require("telescope").load_extension, "fzf")
-
-    -- Enable telescope ui select
-    pcall(require("telescope").load_extension, "ui-select")
-
-    -- File browser
-    pcall(require("telescope").load_extension, "file_browser")
-    vim.keymap.set("n", "<leader>fb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
-
-    -- Cheatsheet of commands
-    pcall(require("telescope").load_extension("cheatsheet"))
-    vim.keymap.set("n", "<leader>ch", ":Cheatsheet<CR>")
-
-    -- Tailwind CSS guide
-    pcall(require("telescope").load_extension("tailiscope"))
-    vim.keymap.set("n", "<leader>tw", ":Telescope tailiscope<CR>")
-
-    -- Enable telescope extension for nvim-notify
-    pcall(require("telescope").load_extension, "notify")
-    vim.keymap.set("n", "<leader>nt", ":Telescope notify<CR>", { desc = "Telescope [N]otifications" })
-
-    -- Enable telescope extension for git worktrees
-    pcall(require("telescope").load_extension("git_worktree"))
-    vim.keymap.set("n", "<leader>wt", ":lua require('telescope').extensions.git_worktree.git_worktrees()<CR>", slient)
-    vim.keymap.set("n", "<leader>wc", ":lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>",
-      slient)
   end,
 }

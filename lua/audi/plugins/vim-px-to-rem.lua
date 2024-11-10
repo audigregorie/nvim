@@ -1,8 +1,18 @@
--- <> Vim Px and Rem
 return {
-  -- Convert between px and rem units
+  -- Plugin to convert between px and rem units
   "Oldenborg/vim-px-to-rem",
-  -- Keymaps :
-  -- :Rem
-  -- :Px
+
+  config = function()
+    -- Key mappings for converting units
+    -- Converts px to rem
+    vim.api.nvim_set_keymap("n", "<leader>pr", ":Rem<CR>", { noremap = true, silent = true, desc = "Convert px to rem" })
+
+    -- Converts rem to px
+    vim.api.nvim_set_keymap("n", "<leader>rp", ":Px<CR>", { noremap = true, silent = true, desc = "Convert rem to px" })
+  end,
+
+  -- Usage:
+  -- :Rem - Converts px values in a line to rem
+  -- :Px  - Converts rem values in a line to px
 }
+

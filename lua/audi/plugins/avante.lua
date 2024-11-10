@@ -1,47 +1,52 @@
--- <> Avante
 return {
   "yetone/avante.nvim",
   event = "VeryLazy",
   lazy = false,
-  version = false, -- set this if you want to always pull the latest change
-  opts = {
-    -- add any opts here
-  },
-  -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-  build = "make",
-  -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+  version = false, -- Always pull the latest version
+  opts = {},
+  -- Build command depending on the platform (default is `make`)
+  build = vim.fn.has("win32") == 1 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" or
+      "make",
+
   dependencies = {
     "nvim-treesitter/nvim-treesitter",
     "stevearc/dressing.nvim",
     "nvim-lua/plenary.nvim",
     "MunifTanjim/nui.nvim",
-    --- The below dependencies are optional,
-    "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-    "zbirenbaum/copilot.lua",      -- for providers='copilot'
+
+    -- Optional dependencies
+    "nvim-tree/nvim-web-devicons", -- Icon support, can switch to mini.icons if needed
     {
-      -- support for image pasting
+      "zbirenbaum/copilot.lua",    -- Optional Copilot integration for providers
+      opts = {
+        -- Copilot-specific options here if needed
+      },
+    },
+
+    {
+      -- Image pasting support (Optional)
       "HakonHarnes/img-clip.nvim",
       event = "VeryLazy",
       opts = {
-        -- recommended settings
+        -- Recommended settings for img-clip
         default = {
           embed_image_as_base64 = false,
           prompt_for_file_name = false,
-          drag_and_drop = {
-            insert_mode = true,
-          },
-          -- required for Windows users
-          use_absolute_path = true,
+          drag_and_drop = { insert_mode = true },
+          -- Windows users: use absolute paths
+          use_absolute_path = vim.fn.has("win32") == 1,
         },
       },
     },
+
     {
-      -- Make sure to set this up properly if you have lazy=true
-      'MeanderingProgrammer/render-markdown.nvim',
+      -- Markdown rendering for Avante
+      "MeanderingProgrammer/render-markdown.nvim",
       opts = {
-        file_types = { "markdown", "Avante" },
+        file_types = { "markdown", "Avante" }, -- Enable for markdown and Avante file types
       },
-      ft = { "markdown", "Avante" },
+      ft = { "markdown", "Avante" },           -- Lazy load for these file types
     },
   },
 }
+

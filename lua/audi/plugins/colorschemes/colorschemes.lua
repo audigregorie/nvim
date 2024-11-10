@@ -1,35 +1,44 @@
--- <> Colorscheme Catppuccin
+-- Catppuccin
+-- ================================
 -- return {
 --   "catppuccin/nvim",
 --   config = function()
---     require("catppuccin").setup({
+--     -- Safely load catppuccin to avoid runtime errors
+--     local ok, catppuccin = pcall(require, "catppuccin")
+--     if not ok then
+--       vim.notify("catppuccin.nvim not found!", vim.log.levels.ERROR)
+--       return
+--     end
+
+--     -- Setup catppuccin with integrations and options
+--     catppuccin.setup({
 --       integrations = {
---         cmp = true,
---         fidget = true,
---         gitsigns = true,
---         harpoon = true,
+--         cmp = true,                 -- Enable integration with nvim-cmp
+--         fidget = true,              -- Enable fidget integration for LSP progress
+--         gitsigns = true,            -- Enable gitsigns integration
+--         harpoon = true,             -- Enable harpoon integration
 --         indent_blankline = {
---           enabled = false,
---           scope_color = "sapphire",
+--           enabled = false,          -- Disable indent_blankline integration
+--           scope_color = "sapphire", -- Set scope color for indent guides
 --           colored_indent_levels = false,
 --         },
---         mason = true,
---         native_lsp = { enabled = true },
---         noice = true,
---         notify = true,
---         symbols_outline = true,
---         telescope = true,
---         treesitter = true,
---         treesitter_context = true,
---         nvimtree = true,
-
+--         mason = true,                    -- Enable Mason integration
+--         native_lsp = { enabled = true }, -- Enable native LSP integration
+--         noice = true,                    -- Enable Noice integration for better notifications
+--         notify = true,                   -- Enable nvim-notify integration
+--         symbols_outline = true,          -- Enable symbols outline integration
+--         telescope = true,                -- Enable Telescope integration
+--         treesitter = true,               -- Enable Treesitter integration
+--         treesitter_context = true,       -- Enable Treesitter context integration
+--         nvimtree = true,                 -- Enable nvim-tree integration
 --       },
-
 --     })
 
+--     -- Apply the Catppuccin color scheme
 --     vim.cmd.colorscheme("catppuccin-macchiato")
 
---     -- Hide all semantic highlights until upstream issues are resolved (https: //github.com/catppuccin/nvim/issues/480)
+--     -- Hide all semantic highlights until upstream issues are resolved
+--     -- Reference: https://github.com/catppuccin/nvim/issues/480
 --     for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
 --       vim.api.nvim_set_hl(0, group, {})
 --     end
@@ -37,139 +46,146 @@
 -- }
 
 
--- <> Colorscheme Vscode
+-- Vscode
+-- ================================
 -- return {
 --   "Mofiqul/vscode.nvim",
 --   config = function()
---     require("vscode").setup({
+--     -- Safely load vscode.nvim to prevent runtime errors
+--     local ok, vscode = pcall(require, "vscode")
+--     if not ok then
+--       vim.notify("vscode.nvim not found!", vim.log.levels.ERROR)
+--       return
+--     end
+
+--     -- Setup vscode theme with integrations and options
+--     vscode.setup({
 --       integrations = {
---         cmp = true,
---         fidget = true,
---         gitsigns = true,
---         harpoon = true,
+--         cmp = true,        -- Enable nvim-cmp integration
+--         fidget = true,     -- Enable fidget integration for LSP progress
+--         gitsigns = true,   -- Enable gitsigns integration
+--         harpoon = true,    -- Enable harpoon integration
 --         indent_blankline = {
---           enabled = false,
+--           enabled = false, -- Disable indent_blankline integration
 --           scope_color = "sapphire",
 --           colored_indent_levels = false,
 --         },
---         mason = true,
---         native_lsp = { enabled = true
---         },
---         noice = true,
---         notify = true,
---         symbols_outline = true,
---         telescope = true,
---         treesitter = true,
---         treesitter_context = true,
+--         mason = true,                    -- Enable Mason integration
+--         native_lsp = { enabled = true }, -- Enable native LSP integration
+--         noice = true,                    -- Enable Noice integration for notifications
+--         notify = true,                   -- Enable nvim-notify integration
+--         symbols_outline = true,          -- Enable symbols outline integration
+--         telescope = true,                -- Enable Telescope integration
+--         treesitter = true,               -- Enable Treesitter integration
+--         treesitter_context = true,       -- Enable Treesitter context integration
 --       },
 --     })
 
+--     -- Apply the vscode colorscheme
 --     vim.cmd.colorscheme("vscode")
 
---     -- Hide all semantic highlights until upstream issues are resolved (https: //github.com/catppuccin/nvim/issues/480)
---     for _, group in ipairs(vim.fn.getcompletion("@lsp",
---       "highlight")) do
---       vim.api.nvim_set_hl(0, group,
---         {})
+--     -- Hide all semantic highlights until upstream issues are resolved
+--     -- Reference: https://github.com/catppuccin/nvim/issues/480
+--     for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
+--       vim.api.nvim_set_hl(0, group, {})
 --     end
 --   end,
 -- }
 
 
--- <> Colorscheme Github
--- return {
---   "projekt0n/github-nvim-theme",
---   config = function()
---     require("github-theme").setup({
---       integrations = {
---         cmp = true,
---         fidget = true,
---         gitsigns = true,
---         harpoon = true,
---         indent_blankline = {
---           enabled = false,
---           scope_color = "sapphire",
---           colored_indent_levels = false,
---         },
---         mason = true,
---         native_lsp = { enabled = true
---         },
---         noice = true,
---         notify = true,
---         symbols_outline = true,
---         telescope = true,
---         treesitter = true,
---         treesitter_context = true,
---       },
---     })
-
---     -- vim.cmd.colorscheme("github_dark")
---     vim.cmd.colorscheme("github_dark_dimmed")
-
---     -- Hide all semantic highlights until upstream issues are resolved (https: //github.com/catppuccin/nvim/issues/480)
---     for _, group in ipairs(vim.fn.getcompletion("@lsp",
---       "highlight")) do
---       vim.api.nvim_set_hl(0, group,
---         {})
---     end
---     vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = "#0A0F14" })
---   end,
--- }
-
-
--- <> Colorscheme Rasmus
--- return {
---   'kvrohit/rasmus.nvim',
---   lazy = false,
---   priority = 1000,
---   config = function()
---     vim.cmd.colorscheme("rasmus")
---   end
--- }
-
-
--- <> Colorscheme Zenbones
--- return {
---   "zenbones-theme/zenbones.nvim",
---   -- Optionally install Lush. Allows for more configuration or extending the colorscheme
---   -- If you don't want to install lush, make sure to set g:zenbones_compat = 1
---   -- In Vim, compat mode is turned on as Lush only works in Neovim.
---   dependencies = "rktjmp/lush.nvim",
---   lazy = false,
---   priority = 1000,
---   opts = {},
---   config = function()
---     vim.cmd.colorscheme("zenbones")
---   end
--- }
-
-
--- <> Colorscheme Monochrome
--- return {
---   "kdheepak/monochrome.nvim",
---   config = function()
---     vim.cmd.colorscheme("monochrome")
-
---     -- Hide all semantic highlights until upstream issues are resolved (https: //github.com/catppuccin/nvim/issues/480)
---     for _, group in ipairs(vim.fn.getcompletion("@lsp",
---       "highlight")) do
---       vim.api.nvim_set_hl(0, group,
---         {})
---     end
---   end,
--- }
-
--- <> Github-colors
+-- Github-colors
+-- ================================
 return {
   'lourenci/github-colors',
-  run = ':TSUpdate',
+  run = ':TSUpdate', -- Ensure Treesitter parsers are updated
+
   config = function()
-    require 'nvim-treesitter.configs'.setup {
+    -- Safely load Treesitter configuration and colorscheme
+    local ts_ok, treesitter_configs = pcall(require, 'nvim-treesitter.configs')
+    if not ts_ok then
+      vim.notify("nvim-treesitter not found!", vim.log.levels.ERROR)
+      return
+    end
+
+    local color_ok, _ = pcall(vim.cmd.colorscheme, "github-colors")
+    if not color_ok then
+      vim.notify("Colorscheme 'github-colors' not found!", vim.log.levels.ERROR)
+      return
+    end
+
+    -- Configure Treesitter with highlighting enabled
+    treesitter_configs.setup {
       highlight = {
-        enable = true,
+        enable = true, -- Enable Treesitter highlighting
       }
     }
-
-    vim.cmd.colorscheme("github-colors")
   end,
 }
+
+
+-- Rasmus
+-- ================================
+-- return {
+--   "kvrohit/rasmus.nvim",
+--   lazy = false,    -- Load immediately
+--   priority = 1000, -- High priority to load the colorscheme first
+
+--   config = function()
+--     -- Safely apply the colorscheme to avoid runtime errors
+--     local ok, _ = pcall(vim.cmd.colorscheme, "rasmus")
+--     if not ok then
+--       vim.notify("Colorscheme 'rasmus' not found!", vim.log.levels.ERROR)
+--       return
+--     end
+--   end,
+-- }
+
+
+-- Zenbones
+-- ================================
+-- return {
+--   "zenbones-theme/zenbones.nvim",
+--   dependencies = {
+--     { "rktjmp/lush.nvim", opt = true },
+--   },
+--   lazy = false,    -- Load immediately
+--   priority = 1000, -- High priority to ensure it loads first
+
+--   config = function()
+--     -- Safely apply the colorscheme to avoid runtime errors
+--     local ok, _ = pcall(vim.cmd.colorscheme, "zenbones")
+--     if not ok then
+--       vim.notify("Colorscheme 'zenbones' not found!", vim.log.levels.ERROR)
+--       return
+--     end
+
+--     -- Set compatibility mode if Lush is not installed (for Vim compatibility)
+--     if not pcall(require, "lush") then
+--       vim.g.zenbones_compat = 1
+--     end
+--   end,
+-- }
+
+
+-- Monochrome
+-- ================================
+-- return {
+--   "kdheepak/monochrome.nvim",
+--   lazy = false, -- Load immediately
+--   priority = 1000, -- High priority to load the colorscheme first
+
+--   config = function()
+--     -- Safely apply the colorscheme to avoid runtime errors
+--     local ok, _ = pcall(vim.cmd.colorscheme, "monochrome")
+--     if not ok then
+--       vim.notify("Colorscheme 'monochrome' not found!", vim.log.levels.ERROR)
+--       return
+--     end
+
+--     -- Hide all semantic highlights until upstream issues are resolved
+--     -- Reference: https://github.com/catppuccin/nvim/issues/480
+--     for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
+--       vim.api.nvim_set_hl(0, group, {})
+--     end
+--   end,
+-- }

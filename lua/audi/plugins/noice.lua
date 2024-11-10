@@ -1,47 +1,47 @@
--- <> Noice
 return {
   "folke/noice.nvim",
   event = "VeryLazy",
-  opts = {
-    -- add any options here
-  },
   dependencies = {
-    -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
     "MunifTanjim/nui.nvim",
-    -- OPTIONAL:
-    --   `nvim-notify` is only needed, if you want to use the notification view.
-    --   If not available, we use `mini` as the fallback
-    "rcarriga/nvim-notify",
+    "rcarriga/nvim-notify", -- Optional: If nvim-notify is not available, Noice will use mini as fallback
   },
+  config = function(_, opts)
+    -- Safely load the Noice plugin
+    local ok, noice = pcall(require, "noice")
+    if not ok then
+      vim.notify("Noice plugin not found!", vim.log.levels.ERROR)
+      return
+    end
 
-  config = function()
-    require("noice").setup({
+    -- Configure Noice with defaults and passed options
+    noice.setup(vim.tbl_deep_extend("force", {
       lsp = {
-        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+        -- Use Treesitter for markdown rendering
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
           ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+          ["cmp.entry.get_documentation"] = true, -- Requires nvim-cmp
         },
       },
-      -- you can enable a preset for easier configuration
+      -- Enable presets for easier configuration
       presets = {
-        bottom_search = true,         -- use a classic bottom cmdline for search
-        command_palette = true,       -- position the cmdline and popupmenu together
-        long_message_to_split = true, -- long messages will be sent to a split
-        inc_rename = false,           -- enables an input dialog for inc-rename.nvim
-        lsp_doc_border = false,       -- add a border to hover docs and signature help
+        bottom_search = true,         -- Classic bottom cmdline for search
+        command_palette = true,       -- Position cmdline and popupmenu together
+        long_message_to_split = true, -- Long messages sent to a split
+        inc_rename = false,           -- Input dialog for inc-rename.nvim (if installed)
+        lsp_doc_border = false,       -- Add a border to hover docs and signature help
       },
       routes = {
         {
           filter = {
             event = "msg_show",
             kind = "",
-            find = "written", -- Suppress messages that contain "written"
+            find = "written", -- Suppress messages containing "written"
           },
           opts = { skip = true },
         },
       },
-    })
-  end
+    }, opts or {})) -- Merge user-provided options if any
+  end,
 }
+

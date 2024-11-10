@@ -395,7 +395,7 @@ return {
 
     -- Function to get a custom message
     local function getShitDone()
-      return [[Get Shit Done.]]
+      return [[Get Shit Done]]
     end
 
     -- Function to get the current time in 24-hour format

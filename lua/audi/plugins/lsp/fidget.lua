@@ -1,15 +1,20 @@
--- <> Fidget
 return {
   "j-hui/fidget.nvim",
-  tag = "legacy",
-  event = {
-    "BufEnter"
-  },
+  tag = "legacy",         -- Use the legacy version for backward compatibility
+  event = { "BufEnter" }, -- Load Fidget on buffer enter
+
   config = function()
-    -- Turn on LSP, formatting, and linting status and progress information
-    require("fidget").setup({
+    -- Safely load Fidget to avoid errors
+    local fidget_ok, fidget = pcall(require, "fidget")
+    if not fidget_ok then
+      vim.notify("Fidget not found!", vim.log.levels.ERROR)
+      return
+    end
+
+    -- Fidget configuration for LSP progress display
+    fidget.setup({
       text = {
-        spinner = "dots_negative",
+        spinner = "dots_negative", -- Spinner style for progress indication
       },
     })
   end,

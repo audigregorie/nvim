@@ -1,51 +1,32 @@
--- <> Treesitter
 return {
-  -- Highlight, edit, and navigate code
   "nvim-treesitter/nvim-treesitter",
-
   dependencies = {
     "nvim-treesitter/nvim-treesitter-textobjects",
   },
-
   build = ":TSUpdate",
+
   config = function()
-    require("nvim-treesitter.configs").setup({
+    -- Safely load nvim-treesitter
+    local ok, ts_configs = pcall(require, "nvim-treesitter.configs")
+    if not ok then
+      vim.notify("nvim-treesitter not found!", vim.log.levels.ERROR)
+      return
+    end
+
+    ts_configs.setup({
       ensure_installed = {
-        "bash",
-        "c",
-        "cpp",
-        "css",
-        "go",
-        "graphql",
-        "html",
-        "http",
-        "javascript",
-        "json",
-        "lua",
-        "markdown",
-        "python",
-        "rust",
-        "tsx",
-        "typescript",
-        "vim",
-        "xml",
-        "yaml",
+        "bash", "c", "cpp", "css", "go", "graphql", "html", "http", "javascript", "json",
+        "lua", "markdown", "python", "rust", "tsx", "typescript", "vim", "xml", "yaml",
       },
-      -- Install parsers synchronously (only applied to `ensure_installed`)
-      sync_install = false,
-      -- Automatically install missing parsers when entering buffer
-      -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-      auto_install = false,
-      -- List of parsers to ignore installing (or "all")
-      ignore_install = {},
-      modules = {},
-      highlight = { enable = true
+      sync_install = false, -- Install parsers asynchronously
+      auto_install = true,  -- Enable automatic installation
+      ignore_install = {},  -- List of parsers to ignore during install
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false, -- Disable if causing conflicts
       },
-      indent = { enable = true
-      },
-      rainbow = {
-        enable = false,
-      },
+      indent = { enable = true },                  -- Enable indentation
+      rainbow = { enable = false },                -- Rainbow brackets
       incremental_selection = {
         enable = true,
         keymaps = {
@@ -55,24 +36,12 @@ return {
           node_decremental = "<M-space>",
         },
       },
-      -- autotag = {
-      --   enable = true,
-      --   enable_rename = true,
-      --   enable_close = true,
-      --   enable_close_on_slash = true,
-      --   filetypes = {
-      --     "html",
-      --     "xml",
-      --     "tsx"
-      --   },
-      -- },
+
       textobjects = {
         select = {
           enable = true,
-          -- Automatically jump forward to textobj, similar to targets.vim
-          lookahead = true,
+          lookahead = true, -- Automatically jump forward to textobj
           keymaps = {
-            -- You can use the capture groups defined in textobjects.scm
             ["aa"] = "@parameter.outer",
             ["ia"] = "@parameter.inner",
             ["af"] = "@function.outer",
@@ -83,7 +52,6 @@ return {
         },
         move = {
           enable = true,
-          -- whether to set jumps in the jumplist
           set_jumps = true,
           goto_next_start = {
             ["]m"] = "@function.outer",
@@ -113,23 +81,5 @@ return {
         },
       },
     })
-
-    -- -- Diagnostic keymaps
-    -- vim.keymap.set("n",
-    -- "[d", vim.diagnostic.goto_prev,
-    -- { desc = "Go to previous diagnostic message"
-    -- })
-    -- vim.keymap.set("n",
-    -- "]d", vim.diagnostic.goto_next,
-    -- { desc = "Go to next diagnostic message"
-    -- })
-    -- vim.keymap.set("n",
-    -- "<leader>r", vim.diagnostic.open_float,
-    -- { desc = "Open floating diagnostic message"
-    -- })
-    -- vim.keymap.set("n",
-    -- "<leader>q", vim.diagnostic.setloclist,
-    -- { desc = "Open diagnostics list"
-    -- })
   end,
 }

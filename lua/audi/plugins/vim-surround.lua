@@ -1,4 +1,3 @@
--- <> Vim Surround
 return {
   "tpope/vim-surround",
   -- Keymaps :

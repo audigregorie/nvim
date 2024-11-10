@@ -1,11 +1,17 @@
--- <> Null-ls
 return {
   "jose-elias-alvarez/null-ls.nvim",
   dependencies = { "nvim-lua/plenary.nvim" },
   config = function()
-    local null_ls = require("null-ls")
+    -- Safely load null-ls to avoid runtime errors
+    local null_ls_ok, null_ls = pcall(require, "null-ls")
+    if not null_ls_ok then
+      vim.notify("Null ls not found!", vim.log.levels.ERROR)
+      return
+    end
+
     local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
+    -- Setup null-ls with specific configurations
     null_ls.setup({
       debug = true,
       sources = {
@@ -20,6 +26,7 @@ return {
             return vim.bo.filetype ~= "lua" and vim.bo.filetype ~= "markdown"
           end,
           prefer_local = "node_modules/.bin",
+          filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "tsx", "json", "html", "css", "scss", "sass" },
           extra_args = {
             "--arrow-parens", "always",
             "--bracket-spacing", "true",
@@ -30,14 +37,9 @@ return {
             "--tab-width", "2",
             "--trailing-comma", "none",
             "--use-tabs", "false",
-            -- "--embedded-language-formatting", "auto",
-            -- "--end-of-line", "lf",
-            -- "--html-whitespace-sensitivity", "css",
             -- "--jsx-single-quote", "false",
-            -- "--prose-wrap", "preserve",
             -- "--quote-props", "as-needed",
             -- "--single-attribute-per-line", "true",
-            -- "--vue-indent-script-and-style", "false",
           },
         }),
 
@@ -60,8 +62,9 @@ return {
           end,
           prefer_local = "node_modules/.bin",
         }),
-
       },
+
+      -- Automatically format the buffer on save if supported
       on_attach = function(client, bufnr)
         if client.supports_method("textDocument/formatting") then
           vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })

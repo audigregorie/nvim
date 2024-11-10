@@ -1,5 +1,4 @@
--- <> Vim sleuth
--- Detect tabstop and shiftwidth automatically
 return {
+  -- Detect tabstop and shiftwidth automatically
   "tpope/vim-sleuth"
 }
