@@ -249,7 +249,8 @@ return {
             "javascript.jsx",
             "typescript",
             "typescriptreact",
-            "typescript.tsx"
+            "typescript.tsx",
+            "angular"
           },
           root_dir = lspconfig_util.root_pattern("tsconfig.json", "jsconfig.json", "package.json"),
           -- TypeScript-specific settings
@@ -278,11 +279,11 @@ return {
             },
           },
           -- This helps with Angular integration
-          -- on_attach = function(client, bufnr)
-          --   -- Disable ts_ls formatting if you're using prettier/eslint
-          --   client.server_capabilities.documentFormattingProvider = false
-          --   client.server_capabilities.documentRangeFormattingProvider = false
-          -- end,
+          on_attach = function(client, bufnr)
+            -- Disable ts_ls formatting if you're using prettier/eslint
+            client.server_capabilities.documentFormattingProvider = false
+            client.server_capabilities.documentRangeFormattingProvider = false
+          end,
         })
       end,
 

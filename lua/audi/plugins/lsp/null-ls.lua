@@ -1,4 +1,3 @@
-
 return {
   "jose-elias-alvarez/null-ls.nvim",
   dependencies = { "nvim-lua/plenary.nvim" },
@@ -29,6 +28,7 @@ return {
           prefer_local = "node_modules/.bin",
           filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "tsx", "json", "html", "css", "scss", "sass" },
           extra_args = {
+            "--parser", "angular",
             "--arrow-parens", "always",
             "--bracket-spacing", "true",
             "--bracket-same-line", "true",

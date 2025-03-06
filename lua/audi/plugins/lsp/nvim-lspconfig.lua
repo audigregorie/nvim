@@ -53,7 +53,7 @@ return {
 
           -- Information keymaps
           safe_keymap_set("n", "K", vim.lsp.buf.hover, opts, "Show hover information")
-          safe_keymap_set("n", "<C-k>", vim.lsp.buf.signature_help, opts, "Show signature help")
+          -- safe_keymap_set("n", "<C-k>", vim.lsp.buf.signature_help, opts, "Show signature help")
 
           -- Workspace keymaps
           safe_keymap_set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts, "Add workspace folder")
