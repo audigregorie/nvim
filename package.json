@@ -1,0 +1,9 @@
+{
+  "name": "nvim-alt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.5.3"
+  }
+}
