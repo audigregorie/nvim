@@ -15,18 +15,18 @@ return {
       debug = true,
       sources = {
         null_ls.builtins.formatting.prettier.with({
-          -- Look for .prettierrc file in the project root
-          condition = function(utils)
-            return utils.root_has_file({
-              ".prettierrc",
-              ".prettierrc.json",
-              ".prettierrc.yml",
-              ".prettierrc.yaml",
-              ".prettierrc.js",
-              "prettier.config.js",
-              ".prettierrc.toml"
-            })
-          end,
+          --     -- Look for .prettierrc file in the project root
+          --     condition = function(utils)
+          --       return utils.root_has_file({
+          --         ".prettierrc",
+          --         ".prettierrc.json",
+          --         ".prettierrc.yml",
+          --         ".prettierrc.yaml",
+          --         ".prettierrc.js",
+          --         "prettier.config.js",
+          --         ".prettierrc.toml"
+          --       })
+          --     end,
           prefer_local = "node_modules/.bin",
           filetypes = {
             "javascript",

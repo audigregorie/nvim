@@ -39,8 +39,8 @@ require("lazy").setup({
     { import = "audi.plugins.lsp.mason" },
     { import = "audi.plugins.lsp.mason-lspconfig" },
     { import = "audi.plugins.lsp.mason-null-ls" },
-    -- { import = "audi.plugins.lsp.null-ls-alt" },     -- ask claude
-    { import = "audi.plugins.lsp.null-ls" },
+    { import = "audi.plugins.lsp.null-ls-alt" }, -- ask claude
+    -- { import = "audi.plugins.lsp.null-ls" },
     { import = "audi.plugins.lsp.nvim-code-action-menu" },
     { import = "audi.plugins.lsp.nvim-lspconfig" },
     { import = "audi.plugins.markdown.vim-markdown" },

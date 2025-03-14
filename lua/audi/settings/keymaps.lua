@@ -84,8 +84,8 @@ vim.keymap.set("v", "<S-j>", ":m '>+1<cr>gv=gv", { noremap = true, silent = true
 vim.keymap.set("v", "<S-k>", ":m '<-2<cr>gv=gv", { noremap = true, silent = true })
 
 -- Remap to indent and outdent lines or blocks of code
--- vim.keymap.set("n", "<Tab>", ">>", { noremap = true, silent = true })
--- vim.keymap.set("n", "<S-Tab>", "<<", { noremap = true, silent = true })
+vim.keymap.set("n", "<Tab>", ">>", { noremap = true, silent = true })
+vim.keymap.set("n", "<S-Tab>", "<<", { noremap = true, silent = true })
 vim.keymap.set("v", "<Tab>", ">gv", { noremap = true, silent = true })
 vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true, silent = true })
 
