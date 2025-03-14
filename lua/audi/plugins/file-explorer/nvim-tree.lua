@@ -13,9 +13,9 @@ return {
         disable_netrw = true,
         hijack_netrw = true,
         view = {
-          width = 50,
+          width = 55,
           relativenumber = true,
-          side = "right",
+          side = "left",
         },
         filters = {
           dotfiles = true,
@@ -128,11 +128,5 @@ return {
         end
       end
     })
-
-    vim.api.nvim_set_hl(0, "NvimTreeFolderIcon", { fg = "#FF8800" }) -- Folder icons
-    -- vim.api.nvim_set_hl(0, "NvimTreeOpenedFolderName", { fg = "#7bace0" }) -- Open folders
-    vim.api.nvim_set_hl(0, "NvimTreeOpenedFile", { fg = "#7bace0" }) -- Files that are open in a buffer
-    -- vim.api.nvim_set_hl(0, "NvimTreeFolderName", { fg = "#4682B4" })       -- Default/closed folders
-    -- vim.api.nvim_set_hl(0, "NvimTreeFolderIcon", { fg = "#4682B4" })       -- Folder icons
   end,
 }

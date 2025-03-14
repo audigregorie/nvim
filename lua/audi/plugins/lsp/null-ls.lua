@@ -47,14 +47,14 @@ return {
         null_ls.builtins.formatting.standardrb,
 
         -- Prettier configuration specifically for Markdown files
-        null_ls.builtins.formatting.prettier.with({
-          filetypes = { "markdown" },
-          prefer_local = "node_modules/.bin",
-          extra_args = {
-            "--print-width", "120", -- Adjust this value as needed for Markdown files
-            "--prose-wrap", "always",
-          },
-        }),
+        -- null_ls.builtins.formatting.prettier.with({
+        --   filetypes = { "markdown" },
+        --   prefer_local = "node_modules/.bin",
+        --   extra_args = {
+        --     "--print-width", "120", -- Adjust this value as needed for Markdown files
+        --     "--prose-wrap", "always",
+        --   },
+        -- }),
 
         -- Use .prettierrc specifically for Lua files
         null_ls.builtins.formatting.prettier.with({

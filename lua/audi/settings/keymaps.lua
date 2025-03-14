@@ -66,6 +66,12 @@ end, { noremap = true, silent = true })
 -- Resize split windows to be equal size
 vim.keymap.set("n", "<leader>=", "<C-w>=", { noremap = true, silent = true })
 
+-- For macOS with Option key (Meta key in Neovim)
+vim.keymap.set('n', '<M-h>', ':vertical resize -2<CR>', { silent = true, desc = 'Decrease window width' })
+vim.keymap.set('n', '<M-l>', ':vertical resize +2<CR>', { silent = true, desc = 'Increase window width' })
+vim.keymap.set('n', '<M-j>', ':resize +2<CR>', { silent = true, desc = 'Increase window height' })
+vim.keymap.set('n', '<M-k>', ':resize -2<CR>', { silent = true, desc = 'Decrease window height' })
+
 -- Stay in indent mode
 vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true })
 vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true })
@@ -78,8 +84,8 @@ vim.keymap.set("v", "<S-j>", ":m '>+1<cr>gv=gv", { noremap = true, silent = true
 vim.keymap.set("v", "<S-k>", ":m '<-2<cr>gv=gv", { noremap = true, silent = true })
 
 -- Remap to indent and outdent lines or blocks of code
-vim.keymap.set("n", "<Tab>", ">>", { noremap = true, silent = true })
-vim.keymap.set("n", "<S-Tab>", "<<", { noremap = true, silent = true })
+-- vim.keymap.set("n", "<Tab>", ">>", { noremap = true, silent = true })
+-- vim.keymap.set("n", "<S-Tab>", "<<", { noremap = true, silent = true })
 vim.keymap.set("v", "<Tab>", ">gv", { noremap = true, silent = true })
 vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true, silent = true })
 
@@ -94,4 +100,3 @@ local function toggle_boolean()
 end
 
 vim.keymap.set("n", "<leader>`", toggle_boolean, { noremap = true, silent = true, desc = "Toggle true/false" })
-
