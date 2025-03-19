@@ -1,4 +1,3 @@
-
 -- Set the runtime path to include the lua directory
 vim.opt.rtp:prepend(vim.fn.stdpath("config") .. "/lua")
 
@@ -10,4 +9,7 @@ require('audi.settings.keymaps')
 require('audi.plugins.lazy.lazy')
 
 -- Load autocmds
-require('audi.settings.autocmds')
+-- Use a small delay before loading autocmds to ensure plugins are initialized
+vim.defer_fn(function()
+  require('audi.settings.autocmds')
+end, 10)

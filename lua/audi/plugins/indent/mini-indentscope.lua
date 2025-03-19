@@ -21,6 +21,10 @@ return {
         },
       })
     end)
+
+    -- Set the highlight color to a soft gray
+    vim.api.nvim_set_hl(0, "MiniIndentscopeSymbol", { fg = "#222222" })
+
     if not setup_ok then
       vim.notify("Failed to setup mini.indentscope: " .. setup_err, vim.log.levels.ERROR)
       return

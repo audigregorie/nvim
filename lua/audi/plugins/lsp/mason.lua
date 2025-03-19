@@ -1,4 +1,5 @@
 -- Mason for managing LSP servers, formatters, and linters
+-- The base for package management
 return {
   "williamboman/mason.nvim",
   config = function()

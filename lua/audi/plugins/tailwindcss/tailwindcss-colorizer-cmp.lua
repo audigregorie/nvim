@@ -1,58 +1,58 @@
+-- tailwindcss-colorizer-cmp.nvim setup (for completion menu colorization)
 return {
-"roobert/tailwindcss-colorizer-cmp.nvim",
-dependencies = {
-  "hrsh7th/nvim-cmp",
-},
-config = function()
-  vim.schedule(function()
-    -- Check if the plugin is available
-    local status_ok, colorizer_cmp = pcall(require, "tailwindcss-colorizer-cmp")
-    if not status_ok then
+  "roobert/tailwindcss-colorizer-cmp.nvim",
+  event = "InsertEnter", -- Lazy load on insert mode only
+  dependencies = {
+    "hrsh7th/nvim-cmp",  -- Ensure cmp is loaded first
+  },
+  config = function()
+    -- Safe requiring with error handling
+    local tw_status, tailwind_colorizer = pcall(require, "tailwindcss-colorizer-cmp")
+    if not tw_status then
       vim.notify("Failed to load tailwindcss-colorizer-cmp plugin", vim.log.levels.ERROR)
       return
     end
-    
-    -- Define options
-    local opts = {
-      color_square_width = 2, -- Width of the color square in the completion menu
-    }
-    
-    -- Try to setup the plugin with the options
+
+    local cmp_status, cmp = pcall(require, "cmp")
+    if not cmp_status then
+      vim.notify("Failed to load nvim-cmp plugin (required dependency)", vim.log.levels.ERROR)
+      return
+    end
+
+    -- Configure tailwind colorizer with error handling
     local setup_ok, setup_error = pcall(function()
-      colorizer_cmp.setup(opts)
+      tailwind_colorizer.setup({
+        color_square_width = 2,
+        -- Use a more efficient rendering method
+        render = "template_string",
+      })
     end)
-    
-    -- Handle any errors during setup
+
     if not setup_ok then
-      vim.notify("Error setting up tailwindcss-colorizer-cmp: " .. tostring(setup_error), vim.log.levels.ERROR)
+      vim.notify("Error setting up tailwindcss-colorizer: " .. tostring(setup_error), vim.log.levels.ERROR)
       return
     end
-    
-    -- Check if cmp is available
-    local cmp_ok, cmp = pcall(require, "cmp")
-    if not cmp_ok then
-      vim.notify("Failed to load nvim-cmp plugin (required for tailwindcss-colorizer-cmp)", vim.log.levels.ERROR)
+
+    -- Only modify the formatter, keeping other cmp settings intact
+    local cmp_config_ok, cmp_config = pcall(cmp.get_config)
+    if not cmp_config_ok then
+      vim.notify("Error getting cmp configuration", vim.log.levels.ERROR)
       return
     end
-    
-    -- Try to update cmp configuration
-    local cmp_setup_ok, cmp_error = pcall(function()
-      -- Get existing configuration first
-      local existing_config = cmp.get_config()
-      local existing_formatting = existing_config.formatting or {}
-      
-      -- Update only the formatter function, preserving other formatting options
+
+    local existing_formatting = cmp_config.formatting or {}
+
+    local cmp_setup_ok, cmp_setup_error = pcall(function()
       cmp.setup({
-        formatting = vim.tbl_deep_extend("force", existing_formatting, {
-          format = colorizer_cmp.formatter
+        formatting = vim.tbl_extend("force", existing_formatting, {
+          format = tailwind_colorizer.formatter
         })
       })
     end)
-    
-    -- Handle any errors during cmp setup
+
     if not cmp_setup_ok then
-      vim.notify("Error integrating tailwindcss-colorizer-cmp with nvim-cmp: " .. tostring(cmp_error), vim.log.levels.ERROR)
+      vim.notify("Error configuring cmp with tailwind formatter: " .. tostring(cmp_setup_error), vim.log.levels.ERROR)
+      return
     end
-  end)
-end,
+  end,
 }

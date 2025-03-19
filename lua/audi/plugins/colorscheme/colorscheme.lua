@@ -1,52 +1,5 @@
 -- # Colorscheme
 
--- ## github-nvim-theme
-
--- Github-nvim-theme
--- return {
---   'projekt0n/github-nvim-theme',
---   config = function()
---     local status_ok, github_theme = pcall(require, 'github-theme')
---     if not status_ok then
---       vim.notify("Failed to load github-nvim-theme", vim.log.levels.ERROR)
---       return
---     end
-
---     -- Try to set up the theme with protected call
---     local setup_ok, _ = pcall(function()
---       github_theme.setup({
---         options = {
---           theme_style = "dark_dimmed", -- Match this with the colorscheme name
---           transparent = false,
---           comment_style = "italic",
---           keyword_style = "italic",
---           function_style = "NONE",
---           variable_style = "NONE",
---           contrast = "normal",
---           hide_inactive_statusline = false,
---           hide_end_of_buffer = true,
---           dark_float = true,
---           dark_sidebar = true,
---           colors_override = {},
---         }
---       })
---     end)
-
---     if not setup_ok then
---       vim.notify("Failed to set up github-nvim-theme", vim.log.levels.WARN)
---     end
-
---     -- Try to apply the colorscheme with protected call
---     local colorscheme_ok, err = pcall(vim.cmd, 'colorscheme github_dark_dimmed')
---     if not colorscheme_ok then
---       vim.notify("Failed to apply colorscheme: " .. err, vim.log.levels.WARN)
---       -- Optionally set a fallback colorscheme
---       pcall(vim.cmd, 'colorscheme default')
---     end
---   end,
--- }
-
-
 -- ## Vscode
 return {
   "Mofiqul/vscode.nvim",
@@ -79,6 +32,10 @@ return {
       --   treesitter = true,               -- Enable Treesitter integration
       --   treesitter_context = true,       -- Enable Treesitter context integration
       -- },
+      -- options = {
+      --   comment_style = "italic",
+      --   keyword_style = "italic",
+      -- }
     })
 
     -- Apply the vscode colorscheme
@@ -92,28 +49,39 @@ return {
   end,
 }
 
--- ## Github Theme
--- return {
---   'projekt0n/github-nvim-theme',
---   priority = 1000, -- Ensure it loads before other plugins
---   lazy = false,
---   opts = {
---     options = {
---       -- Customize style
---       theme_style = "dimmed", -- Options: 'dark', 'dimmed', 'dark_default', 'dark_colorblind', 'light', 'light_default', 'light_colorblind'
---       transparent = false,    -- Make background transparent
---       dim_inactive = false,   -- Dim inactive windows
---       styles = {
---         comments = "italic",
---       },
---     },
---   },
---   config = function(_, opts)
---     -- Setup theme with options
---     require('github-theme').setup(opts)
 
---     -- Set colorscheme
---     vim.cmd('colorscheme github_dark_dimmed')
+-- ## github-nvim-theme
+-- return {
+--   "projekt0n/github-nvim-theme",
+--   lazy = false,
+--   priority = 1000,
+--   opts = {},
+
+--   config = function()
+--     local ok, github_theme = pcall(require, 'github-theme')
+
+--     if not ok then
+--       vim.notify("Failed to load github-nvim-theme", vim.log.levels.ERROR)
+--       return
+--     end
+
+--     -- Plugin configuration
+--     github_theme.setup({
+--       options = {
+--         styles = {
+--           comment = "italic",
+--           -- keyword = "bold",
+--           -- functions = "bold",
+--           -- variable = "none",
+--         },
+--         sidebars = { "qf", "vista_kind", "terminal", "packer" },
+--         dark_sidebar = true,
+--         colors = {},
+--       },
+--     })
+
+--     -- Apply the colorscheme
+--     local colorscheme_ok = pcall(vim.cmd, "colorscheme github_dark")
 
 --     -- Define custom highlights
 --     local custom_highlights = {
@@ -143,11 +111,55 @@ return {
 --       vim.api.nvim_set_hl(0, group, settings)
 --     end
 
--- Hide all semantic highlights until upstream issues are resolved
--- Reference: https://github.com/catppuccin/nvim/issues/480
--- for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
---   vim.api.nvim_set_hl(0, group, {})
--- end
 
---   end,
+--     if not colorscheme_ok then
+--       vim.notify("Failed to apply github-nvim-theme colorscheme", vim.log.levels.ERROR)
+--     end
+--   end
+-- }
+
+
+-- ## Tokyonight
+-- return {
+--   "folke/tokyonight.nvim",
+--   lazy = false,
+--   priority = 1000,
+--   opts = {},
+
+--   config = function()
+--     local ok, tokyonight = pcall(require, 'tokyonight')
+
+--     if not ok then
+--       vim.notify("Failed to load tokyonight.nvim", vim.log.levels.ERROR)
+--       return
+--     end
+
+--     -- Plugin configuration
+--     tokyonight.setup({
+--       style = "night", -- Options: "storm", "night", "day", "moon"
+--       transparent = false,
+--       terminal_colors = true,
+--       styles = {
+--         comments = { italic = true },
+--         keywords = { italic = false },
+--         functions = {},
+--         variables = {},
+--         sidebars = "dark",
+--         floats = "dark",
+--       },
+--       on_colors = function(_)
+--         -- Customize specific colors (currently unused)
+--       end,
+--       on_highlights = function(_, _)
+--         -- Customize highlights (currently unused)
+--       end,
+--     })
+
+--     -- Apply the colorscheme
+--     local colorscheme_ok = pcall(vim.cmd, "colorscheme tokyonight")
+
+--     if not colorscheme_ok then
+--       vim.notify("Failed to apply tokyonight colorscheme", vim.log.levels.ERROR)
+--     end
+--   end
 -- }

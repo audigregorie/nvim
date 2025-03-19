@@ -67,6 +67,6 @@ vim.opt.sidescrolloff = 10   -- Min columns to keep left/right of cursor
 -- Input
 vim.opt.mouse = "a"                              -- Enable mouse in all modes
 vim.opt.backspace = { "indent", "eol", "start" } -- Backspace behavior
-vim.opt.guicursor = ""                           -- Use block cursor in all modes
+vim.opt.guicursor = "a:block"                    -- Use block cursor in all modes
 vim.opt.clipboard = "unnamedplus"                -- Use system clipboard
 vim.opt.shell = "zsh"                            -- Shell to use for external commands

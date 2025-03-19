@@ -1,3 +1,4 @@
+-- Ensures installed formatting and linting
 return {
   "jay-babu/mason-null-ls.nvim",
   event = { "BufReadPre", "BufNewFile", },
