@@ -13,7 +13,6 @@ return {
 		{ "nvim-telescope/telescope-file-browser.nvim" },
 		{ "nvim-telescope/telescope-ui-select.nvim" },
 		{ "sudormrfbin/cheatsheet.nvim" },
-		{ "marianina8/tailiscope.nvim" },
 		{ "rcarriga/nvim-notify" },
 	},
 	config = function()
@@ -149,7 +148,6 @@ return {
 		pcall(telescope.load_extension, "find_files")
 		pcall(telescope.load_extension, "file_browser")
 		pcall(telescope.load_extension, "ui-select")
-		pcall(telescope.load_extension, "tailiscope")
 
 		-- Key mappings
 		local keymap_ok, keymap_err = pcall(function()
@@ -185,13 +183,10 @@ return {
 			vim.keymap.set("n", "<leader>wd", builtin.diagnostics, keymap_opts("[W]orkspace [D]iagnostics"))
 			vim.keymap.set("n", "<leader>ds", builtin.lsp_document_symbols, keymap_opts("[D]ocument [S]ymbols"))
 			vim.keymap.set("n", "<leader>qf", builtin.quickfix, keymap_opts("[Q]uick [F]ix"))
-
-			-- Tailiscope
-			vim.keymap.set("n", "<leader>tw", ":Telescope tailiscope<CR>", keymap_opts("Search Tailwind CSS classes"))
 		end)
 
 		if not keymap_ok then
 			vim.notify("Failed to set telescope keymaps: " .. keymap_err, vim.log.levels.WARN)
 		end
 	end,
-} -- Telescope (fuzzy finder)
+}

@@ -41,6 +41,7 @@ require("lazy").setup({
 			{ import = "audi.plugins.git.diffview" }, -- Git diff viewer
 			{ import = "audi.plugins.git.git-blame" }, -- Inline Git blame annotations
 			{ import = "audi.plugins.git.gitsigns" }, -- Git decorations (signs, hunks, etc.)
+			{ import = "audi.plugins.git.lazygit" }, -- Git integration GUI for Neovim
 			{ import = "audi.plugins.git.neogit" }, -- Magit-like Git interface for Neovim
 
 			-- Statusline & UI Improvements
@@ -51,6 +52,7 @@ require("lazy").setup({
 
 			-- Snippets & Editing Enhancements
 			{ import = "audi.plugins.luasnip" }, -- Snippet engine
+			{ import = "audi.plugins.friendly-snippets" }, -- Friendly snippets
 			{ import = "audi.plugins.nvim-auto-pairs" }, -- Auto-closes brackets and quotes
 			{ import = "audi.plugins.nvim-ts-autotag" }, -- Auto-closes and renames HTML/XML tags
 			{ import = "audi.plugins.mini-cursorword" }, -- Highlights the word under the cursor
@@ -60,6 +62,7 @@ require("lazy").setup({
 			{ import = "audi.plugins.neoscroll" }, -- Smooth scrolling
 			{ import = "audi.plugins.nvim-tmux-navigation" }, -- Seamless navigation between Neovim and Tmux
 			{ import = "audi.plugins.oil" }, -- A file explorer alternative with a minimal UI
+			{ import = "audi.plugins.harpoon" }, -- Marks and retrieves files
 
 			-- Tailwind & Markdown Support
 			{ import = "audi.plugins.md-headers" }, -- Improves markdown header navigation
