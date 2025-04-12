@@ -35,6 +35,7 @@ require("lazy").setup({
 			{ import = "audi.plugins.nvim-navic" }, -- Displays LSP breadcrumbs in statusline
 			{ import = "audi.plugins.nvim-notify" }, -- Fancy notification UI for messages
 			{ import = "audi.plugins.nvim-scrollbar" }, -- Adds a visual scrollbar with markers
+			{ import = "audi.plugins.rainbow-delimiters" }, -- bracket highlighting in code
 			{ import = "audi.plugins.transparent" }, -- Makes Neovim UI transparent
 
 			-- Git Integration
@@ -74,6 +75,7 @@ require("lazy").setup({
 			{ import = "audi.plugins.undotree" }, -- Visual undo history tree
 
 			-- Commenting & Editing Utilities
+			{ import = "audi.plugins.fast-cursor-move" }, -- Accerlate the speed of cursor movement
 			{ import = "audi.plugins.vim-commentary" }, -- Easy commenting
 			{ import = "audi.plugins.vim-px-to-rem" }, -- Converts px to rem in CSS files
 			{ import = "audi.plugins.vim-sleuth" }, -- Detects and sets indentation settings automatically
