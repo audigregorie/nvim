@@ -16,7 +16,8 @@ return {
 		-- Define colors with error handling
 		local colors_ok, colors = pcall(function()
 			return {
-				bg = "#111112",
+				-- bg = "#111112",
+				bg = "#090909",
 				fg = "#bbc2cf",
 				yellow = "#ECBE7B",
 				cyan = "#008080",

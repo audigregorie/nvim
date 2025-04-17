@@ -63,11 +63,11 @@ return {
 			end
 
 			-- Navigation keymaps
-			safe_keymap_set("n", "gd", vim.lsp.buf.definition, opts, "Go to definition")
-			safe_keymap_set("n", "gD", vim.lsp.buf.declaration, opts, "Go to declaration")
-			safe_keymap_set("n", "gi", vim.lsp.buf.implementation, opts, "Go to implementation")
-			safe_keymap_set("n", "gr", vim.lsp.buf.references, opts, "Show references")
-			safe_keymap_set("n", "gt", vim.lsp.buf.type_definition, opts, "Go to type definition")
+			safe_keymap_set("n", "<leader>gd", vim.lsp.buf.definition, opts, "Go to definition")
+			safe_keymap_set("n", "<leader>gD", vim.lsp.buf.declaration, opts, "Go to declaration")
+			safe_keymap_set("n", "<leader>gI", vim.lsp.buf.implementation, opts, "Go to implementation")
+			safe_keymap_set("n", "<leader>gr", vim.lsp.buf.references, opts, "Show references")
+			safe_keymap_set("n", "<leader>gt", vim.lsp.buf.type_definition, opts, "Go to type definition")
 
 			-- Information keymaps
 			safe_keymap_set("n", "K", vim.lsp.buf.hover, opts, "Show hover information")
