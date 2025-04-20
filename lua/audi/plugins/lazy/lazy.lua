@@ -67,6 +67,7 @@ require("lazy").setup({
 
 			-- Tailwind & Markdown Support
 			{ import = "audi.plugins.md-headers" }, -- Improves markdown header navigation
+			{ import = "audi.plugins.render-markdown" }, -- Renders markdown files and more
 			{ import = "audi.plugins.tailwindcss-colorizer-cmp" }, -- Enhances TailwindCSS autocomplete with color previews
 
 			-- Terminal & Debugging

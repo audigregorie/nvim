@@ -89,3 +89,18 @@ vim.api.nvim_set_hl(0, "NavicIconsOperator", { fg = "#51afef" })
 vim.api.nvim_set_hl(0, "NavicIconsTypeParameter", { fg = "#51afef" })
 vim.api.nvim_set_hl(0, "NavicText", { fg = "#bbc2cf" })
 vim.api.nvim_set_hl(0, "NavicSeparator", { fg = "#5B6268" })
+
+-- ## Render Markdown
+vim.api.nvim_set_hl(0, "RenderMarkdownH1Bg", { bg = "#171717", blend = 70 })
+vim.api.nvim_set_hl(0, "RenderMarkdownH2Bg", { bg = "#171717", blend = 70 })
+vim.api.nvim_set_hl(0, "RenderMarkdownH3Bg", { bg = "#171717", blend = 70 })
+vim.api.nvim_set_hl(0, "RenderMarkdownH4Bg", { bg = "#171717", blend = 70 })
+vim.api.nvim_set_hl(0, "RenderMarkdownH5Bg", { bg = "#171717", blend = 70 })
+vim.api.nvim_set_hl(0, "RenderMarkdownH6Bg", { bg = "#171717", blend = 70 })
+
+vim.api.nvim_set_hl(0, "RenderMarkdownH1", { fg = "#bf7d56" })
+vim.api.nvim_set_hl(0, "RenderMarkdownH2", { fg = "#bf7d56" })
+vim.api.nvim_set_hl(0, "RenderMarkdownH3", { fg = "#bf7d56" })
+vim.api.nvim_set_hl(0, "RenderMarkdownH4", { fg = "#bf7d56" })
+vim.api.nvim_set_hl(0, "RenderMarkdownH5", { fg = "#bf7d56" })
+vim.api.nvim_set_hl(0, "RenderMarkdownH6", { fg = "#bf7d56" })
