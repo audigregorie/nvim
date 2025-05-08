@@ -43,11 +43,13 @@ require("lazy").setup({
 			{ import = "audi.plugins.git.git-blame" }, -- Inline Git blame annotations
 			{ import = "audi.plugins.git.gitsigns" }, -- Git decorations (signs, hunks, etc.)
 			{ import = "audi.plugins.git.lazygit" }, -- Git integration GUI for Neovim
+			{ import = "audi.plugins.git.vim-fugitive" }, -- Git interface for neovim
 			{ import = "audi.plugins.git.neogit" }, -- Magit-like Git interface for Neovim
 
 			-- Statusline & UI Improvements
 			{ import = "audi.plugins.lualine" }, -- Statusline plugin
-			{ import = "audi.plugins.nvim-tree" }, -- File explorer for Neovim
+			-- { import = "audi.plugins.nvim-tree" }, -- File explorer for Neovim
+			{ import = "audi.plugins.neo-tree" }, -- File explorer for Neovim
 			{ import = "audi.plugins.telescope" }, -- Fuzzy finder UI
 			{ import = "audi.plugins.trouble" }, -- Diagnostics and quickfix list UI
 

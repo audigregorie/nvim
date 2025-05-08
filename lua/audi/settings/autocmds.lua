@@ -47,6 +47,16 @@ vim.api.nvim_create_autocmd({ "FileType", "ColorScheme" }, {
 	end,
 })
 
+-- ## Disable SCSS Linter
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "scss",
+	callback = function()
+		-- Disable specific linters or set LSP settings
+		vim.lsp.diagnostic.disable()
+		-- Or use a custom setup for SCSS here
+	end,
+})
+
 -- ## Window split
 vim.api.nvim_set_hl(0, "WinSeparator", { bg = "#000000", fg = "#222222" })
 
