@@ -83,8 +83,9 @@ return {
 					},
 					plugins = {
 						-- Support for .component.html and .component.css files
-						["@angular/language-service"] = {
-							ngServicePath = "node_modules/@angular/language-service",
+						{
+							name = "@angular/language-service",
+							location = "node_modules/@angular/language-service",
 						},
 					},
 				},
