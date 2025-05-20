@@ -23,6 +23,7 @@ return {
 			eslint = {},
 			lua_ls = {},
 			emmet_ls = {},
+			angularls = {},
 		}
 
 		-- Setup all servers
