@@ -1,4 +1,4 @@
--- # Colorscheme
+-- Colorscheme
 
 -- ## Vscode
 -- return {

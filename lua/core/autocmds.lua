@@ -1,48 +1,47 @@
--- # Autocmds
 local vim = vim
 
 -- ## Yank Highlighting
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
-  callback = function()
-    vim.highlight.on_yank({ timeout = 200, visual = true })
-  end,
-  group = highlight_group,
-  pattern = "*",
-  desc = "Highlight selection on yank",
+	callback = function()
+		vim.highlight.on_yank({ timeout = 200, visual = true })
+	end,
+	group = highlight_group,
+	pattern = "*",
+	desc = "Highlight selection on yank",
 })
 
 -- ## Relative Number Settings
 vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
-  pattern = "*",
-  callback = function()
-    vim.wo.relativenumber = true
-  end,
-  desc = "Enable relative numbers",
+	pattern = "*",
+	callback = function()
+		vim.wo.relativenumber = true
+	end,
+	desc = "Enable relative numbers",
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "qf", "terminal" },
-  callback = function()
-    vim.wo.relativenumber = false
-  end,
-  desc = "Disable relative numbers for quickfix and terminal",
+	pattern = { "qf", "terminal" },
+	callback = function()
+		vim.wo.relativenumber = false
+	end,
+	desc = "Disable relative numbers for quickfix and terminal",
 })
 
 -- ## Formatting Options
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "*",
-  command = "setlocal formatoptions-=cro",
-  desc = "Disable comment continuation on new lines",
+	pattern = "*",
+	command = "setlocal formatoptions-=cro",
+	desc = "Disable comment continuation on new lines",
 })
 
 -- ##  Markdown Code Highlighting
 vim.api.nvim_create_autocmd({ "FileType", "ColorScheme" }, {
-  pattern = { "markdown" },
-  callback = function()
-    vim.api.nvim_set_hl(0, "markdownCode", { bg = "#2A3542" })
-    vim.api.nvim_set_hl(0, "markdownCodeBlock", { bg = "#2A3542" })
-  end,
+	pattern = { "markdown" },
+	callback = function()
+		vim.api.nvim_set_hl(0, "markdownCode", { bg = "#2A3542" })
+		vim.api.nvim_set_hl(0, "markdownCodeBlock", { bg = "#2A3542" })
+	end,
 })
 
 -- ## Disable SCSS Linter

@@ -64,8 +64,8 @@ end, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>=", "<C-w>=", { noremap = true, silent = true })
 
 -- For macOS with Option key (Meta key in Neovim)
-vim.keymap.set("n", "<M-h>", ":vertical resize -2<CR>", { silent = true, desc = "Decrease window width" })
-vim.keymap.set("n", "<M-l>", ":vertical resize +2<CR>", { silent = true, desc = "Increase window width" })
+vim.keymap.set("n", "<M-h>", ":vertical resize +2<CR>", { silent = true, desc = "Increase window width" })
+vim.keymap.set("n", "<M-l>", ":vertical resize -2<CR>", { silent = true, desc = "Decrease window width" })
 vim.keymap.set("n", "<M-j>", ":resize +2<CR>", { silent = true, desc = "Increase window height" })
 vim.keymap.set("n", "<M-k>", ":resize -2<CR>", { silent = true, desc = "Decrease window height" })
 
@@ -103,5 +103,3 @@ vim.keymap.set("n", "<leader>ph", ":Gitsigns preview_hunk<CR>", { noremap = true
 vim.keymap.set("n", "<leader>gb", ":Git blame<CR>", { noremap = true, desc = "Git: blame" })
 vim.keymap.set("n", "<leader>gl", ":Gclog<CR>", { noremap = true, desc = "Git: log" })
 -- Gclog (to see the commits, copy the commit hash and run :Gdiffsplit <hash>)
-
-

@@ -46,6 +46,10 @@ return {
 			},
 		})
 
+		vim.api.nvim_set_hl(0, "NeoTreeNormal", { bg = "#090909" })
+		-- vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "#060606" })
+		-- vim.api.nvim_set_hl(0, "NeoTreeEndOfBuffer", { bg = "#000000" })
+
 		-- Optional: set keymaps
 		vim.keymap.set("n", "<leader>t", ":Neotree toggle<CR>", { desc = "Toggle NeoTree" })
 		vim.keymap.set("n", "<leader>tf", ":Neotree filesystem toggle<CR>", { desc = "NeoTree Filesystem" })
