@@ -25,8 +25,8 @@ return {
 		-- Setup mason-lspconfig
 		mason_lspconfig.setup({
 			ensure_installed = {
-				"ts_ls",
-				"html",
+				-- "ts_ls",
+				-- "html",
 				"cssls",
 				"lua_ls",
 				"angularls",
@@ -38,12 +38,12 @@ return {
 			automatic_installation = true,
 			handlers = { -- Handlers are now a key within this setup table
 				-- Default handler
-				function(server_name)
-					lspconfig[server_name].setup({
-						capabilities = capabilities,
-						on_attach = vim.g.common_on_attach, -- Use the globally defined on_attach function
-					})
-				end,
+				-- function(server_name)
+				-- 	lspconfig[server_name].setup({
+				-- 		capabilities = capabilities,
+				-- 		on_attach = vim.g.common_on_attach, -- Use the globally defined on_attach function
+				-- 	})
+				-- end,
 
 				-- Custom handler for angularls
 				["angularls"] = function()
@@ -86,11 +86,7 @@ return {
 				["cssls"] = function()
 					lspconfig.cssls.setup({
 						capabilities = capabilities,
-						on_attach = function(client, bufnr)
-							if vim.g.common_on_attach then
-								vim.g.common_on_attach(client, bufnr)
-							end
-						end,
+						on_attach = vim.g.common_on_attach,
 						filetypes = { "css", "scss", "less" },
 						settings = {
 							css = {
@@ -205,45 +201,45 @@ return {
 				end,
 
 				-- Custom handler for tsserver (TypeScript)
-				["ts_ls"] = function()
-					lspconfig.ts_ls.setup({
-						capabilities = capabilities,
-						on_attach = vim.g.common_on_attach,
-						filetypes = {
-							"javascript",
-							"javascriptreact",
-							"javascript.jsx",
-							"typescript",
-							"typescriptreact",
-							"typescript.tsx",
-						},
-						root_dir = lspconfig_util.root_pattern("tsconfig.json", "jsconfig.json", "package.json"),
-						settings = {
-							typescript = {
-								inlayHints = {
-									includeInlayParameterNameHints = "all",
-									includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-									includeInlayFunctionParameterTypeHints = true,
-									includeInlayVariableTypeHints = true,
-									includeInlayPropertyDeclarationTypeHints = true,
-									includeInlayFunctionLikeReturnTypeHints = true,
-									includeInlayEnumMemberValueHints = true,
-								},
-							},
-							javascript = {
-								inlayHints = {
-									includeInlayParameterNameHints = "all",
-									includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-									includeInlayFunctionParameterTypeHints = true,
-									includeInlayVariableTypeHints = true,
-									includeInlayPropertyDeclarationTypeHints = true,
-									includeInlayFunctionLikeReturnTypeHints = true,
-									includeInlayEnumMemberValueHints = true,
-								},
-							},
-						},
-					})
-				end,
+				-- ["ts_ls"] = function()
+				-- 	lspconfig.ts_ls.setup({
+				-- 		capabilities = capabilities,
+				-- 		on_attach = vim.g.common_on_attach,
+				-- 		filetypes = {
+				-- 			"javascript",
+				-- 			"javascriptreact",
+				-- 			"javascript.jsx",
+				-- 			"typescript",
+				-- 			"typescriptreact",
+				-- 			"typescript.tsx",
+				-- 		},
+				-- 		root_dir = lspconfig_util.root_pattern("tsconfig.json", "jsconfig.json", "package.json"),
+				-- 		settings = {
+				-- 			typescript = {
+				-- 				inlayHints = {
+				-- 					includeInlayParameterNameHints = "all",
+				-- 					includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+				-- 					includeInlayFunctionParameterTypeHints = true,
+				-- 					includeInlayVariableTypeHints = true,
+				-- 					includeInlayPropertyDeclarationTypeHints = true,
+				-- 					includeInlayFunctionLikeReturnTypeHints = true,
+				-- 					includeInlayEnumMemberValueHints = true,
+				-- 				},
+				-- 			},
+				-- 			javascript = {
+				-- 				inlayHints = {
+				-- 					includeInlayParameterNameHints = "all",
+				-- 					includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+				-- 					includeInlayFunctionParameterTypeHints = true,
+				-- 					includeInlayVariableTypeHints = true,
+				-- 					includeInlayPropertyDeclarationTypeHints = true,
+				-- 					includeInlayFunctionLikeReturnTypeHints = true,
+				-- 					includeInlayEnumMemberValueHints = true,
+				-- 				},
+				-- 			},
+				-- 		},
+				-- 	})
+				-- end,
 			},
 		})
 	end,

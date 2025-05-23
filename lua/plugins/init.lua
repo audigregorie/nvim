@@ -77,7 +77,7 @@ return require("lazy").setup({
 
 	-- -- AI-powered
 	{ import = "plugins.configs.supermaven" }, -- AI-powered autocomplete
-	{ import = "plugins.configs.avante" }, -- (AI-powered IDE functionality e.g. Cursor)
+	-- { import = "plugins.configs.avante" }, -- (AI-powered IDE functionality e.g. Cursor)
 
 	-- -- Inactive Plugins (Commented Out)
 	-- -- { import = "plugins.configs.luarocks" }, -- Manages Lua dependencies

@@ -17,15 +17,15 @@ return {
 				winbar = true, -- show selector in the winbar (or set to false if you want in the top)
 				statusline = false, -- alternatively show it in statusline
 				sources = {
-					{ source = "filesystem", display_name = "󰉓 Files" },
-					{ source = "buffers", display_name = "󰈚 Buffers" },
-					{ source = "git_status", display_name = " Git" },
+					{ source = "filesystem", display_name = "󰉓  Files" },
+					{ source = "buffers", display_name = "󰈚  Buffers" },
+					{ source = "git_status", display_name = "  Git" },
 				},
 			},
 			window = {
 				position = "right",
 				width = 60, -- 40
-				auto_expand_width = true,
+				-- auto_expand_width = true,
 			},
 			filesystem = {
 				filtered_items = {
@@ -47,7 +47,7 @@ return {
 		})
 
 		vim.api.nvim_set_hl(0, "NeoTreeNormal", { bg = "#090909" })
-		-- vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "#060606" })
+		vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "#0F0F0F" })
 		-- vim.api.nvim_set_hl(0, "NeoTreeEndOfBuffer", { bg = "#000000" })
 
 		-- Optional: set keymaps

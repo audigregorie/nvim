@@ -15,7 +15,7 @@ return {
 			json = { "prettier" },
 			jsonc = { "prettier" }, -- For JSON with comments
 			yaml = { "prettier" },
-			markdown = { "prettier" },
+			-- markdown = { "prettier" },
 			html = { "prettier" },
 			css = { "prettier" },
 			scss = { "prettier" },

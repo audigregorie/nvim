@@ -233,7 +233,7 @@ return {
 			normal = {
 				a = { fg = "#0077b6", bg = "#020202", gui = "bold" }, -- Example: section 'a' foreground black, background orange
 				b = { fg = "#dddddd", bg = "#111111", gui = "bold" }, -- Example: section 'a' foreground black, background orange
-				c = { fg = "#dddddd", bg = "#181818", gui = "bold" }, -- Example: section 'a' foreground black, background orange
+				c = { fg = "#dddddd", bg = "#090909", gui = "bold" }, -- Example: section 'a' foreground black, background orange
 			},
 			inactive = {},
 			-- Add other modes like 'insert', 'visual', 'replace', etc., if you want different colors for them

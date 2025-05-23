@@ -79,6 +79,15 @@ return {
 			}),
 		})
 
+		-- HtmlAngular class
+		ls.add_snippets("htmlangular", {
+			s("cl", {
+				t('class="'),
+				i(1, ""),
+				t('"'),
+			}),
+		})
+
 		-- Set up keybindings for jumping between snippet placeholders
 		vim.keymap.set({ "i", "s" }, "<Tab>", function()
 			if ls.expand_or_jumpable() then

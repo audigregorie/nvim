@@ -3,7 +3,10 @@ return {
 	version = "*",
 	config = function()
 		require("toggleterm").setup({
-			direction = "float",
+			-- open_mapping = [[<c-\>]], -- Ctrl+\ to toggle
+			direction = "float", -- or 'horizontal', 'vertical', 'tab'
+			shade_terminals = true,
+			start_in_insert = true,
 			float_opts = {
 				border = "curved", -- 'single' | 'double' | 'shadow' | 'curved' for floating terminals
 				winblend = 3, -- Transparency level for the floating window
@@ -24,17 +27,12 @@ return {
 				FloatBorder = {
 					-- guifg = "#1d90f5",
 					guifg = "#006400",
-					guibg = "#111112",
+					guibg = "#0F0F0F",
 				},
 			},
 		})
 
-		-- Set your keymap here
-		vim.api.nvim_set_keymap(
-			"n",
-			"<leader>0",
-			":ToggleTerm<CR>",
-			{ noremap = true, silent = true, desc = "Toggle terminal" }
-		)
+		vim.keymap.set("n", "<leader>tt", "<cmd>ToggleTerm<CR>", { desc = "Toggle terminal" })
+		vim.keymap.set("t", "<leader>tt", "<cmd>ToggleTerm<CR>", { desc = "Toggle terminal in terminal mode" })
 	end,
 }

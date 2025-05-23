@@ -18,7 +18,8 @@ vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir" -- Where to save undo his
 -- Visual UI Elements
 vim.opt.number = true -- Show line numbers
 vim.opt.relativenumber = true -- Show relative line numbers
-vim.opt.numberwidth = 2 -- Width of number column
+vim.opt.numberwidth = 3 -- Width of number column
+vim.opt.statuscolumn = "%s %l   " -- Control the left gutter — numbers, signs, spacing, etc
 vim.opt.signcolumn = "yes" -- Always show sign column
 vim.opt.cursorline = true -- Highlight current line
 vim.opt.cursorlineopt = "number" -- Highlight only line number
@@ -71,4 +72,3 @@ vim.opt.backspace = { "indent", "eol", "start" } -- Backspace behavior
 vim.opt.guicursor = "a:block" -- Use block cursor in all modes
 vim.opt.clipboard = "unnamedplus" -- Use system clipboard
 vim.opt.shell = "zsh" -- Shell to use for external commands
-
