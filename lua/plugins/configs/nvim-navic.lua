@@ -91,7 +91,7 @@ return {
 
 		-- ## Navic Highlighting
 		-- Set background color for the winbar
-		vim.api.nvim_set_hl(0, "WinBar", { bg = "#000000" })
+		vim.api.nvim_set_hl(0, "WinBar", { bg = "#0F0F0F" })
 		-- vim.api.nvim_set_hl(0, "WinBar", { bg = "#111112" })
 		-- vim.api.nvim_set_hl(0, "WinBar", { bg = "#0d1014" })
 
