@@ -6,6 +6,7 @@ return {
   keys = {
     { '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>',              desc = 'Diagnostics (Trouble)' },
     { '<leader>xd', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', desc = 'Buffer Diagnostics (Trouble)' },
+    { '<leader>xw', '<cmd>Trouble diagnostics toggle<cr>',              desc = 'Workspace Diagnostics (Trouble)' },
   },
   config = function()
     require('trouble').setup()

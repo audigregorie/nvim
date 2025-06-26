@@ -258,6 +258,8 @@ require("lazy").setup({
           vim.lsp.buf.format({ async = true })
         end, vim.tbl_extend("force", opts, { desc = "Format Buffer" }))
         keymap("n", "<leader>d", vim.diagnostic.open_float, vim.tbl_extend("force", opts, { desc = "Show Diagnostics" }))
+        keymap("n", "<leader>wd", require("telescope.builtin").diagnostics,
+          vim.tbl_extend("force", opts, { desc = "[W]orkspace [D]iagnostics" }))
         keymap("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end,
           vim.tbl_extend("force", opts, { desc = "Previous Diagnostic" }))
         keymap("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end,
