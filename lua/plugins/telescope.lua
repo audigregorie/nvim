@@ -131,5 +131,12 @@ return {
         -- cwd = get_git_root(), -- Use the helper function defined above
       })
     end, { desc = "Find Files (Git Project Root)" })
+
+    -- Keymap for live grep to search any word in the root folder
+    vim.keymap.set("n", "<leader>fg", function()
+      require("telescope.builtin").live_grep({
+        -- cwd = get_git_root(), -- Uncomment if you want to search from git root
+      })
+    end, { desc = "Live Grep (Search Text)" })
   end,
 }
