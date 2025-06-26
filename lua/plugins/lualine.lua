@@ -3,6 +3,11 @@ return {
   dependencies = { 'nvim-tree/nvim-web-devicons' }, -- For icons
   event = "VimEnter",
   config = function()
+    -- Function to get a custom message with error handling
+    local getShitDone = function()
+      return "Get Shit Done"
+    end
+
     require('lualine').setup({
       options = {
         icons_enabled = true,
@@ -21,9 +26,9 @@ return {
       sections = {
         lualine_a = { '' },
         lualine_b = { 'branch', 'diagnostics' },
-        lualine_c = { { 'filename', path = 1 } },
-        lualine_x = { '', },
-        lualine_y = { 'diff' },
+        lualine_c = { { 'filename', path = 1, color = { fg = '#aaaaaa' } } },
+        lualine_x = { { 'diff', }, { getShitDone, color = { fg = '#aaaaaa' } } },
+        lualine_y = { '' },
         lualine_z = { '' }
       },
       inactive_sections = {
