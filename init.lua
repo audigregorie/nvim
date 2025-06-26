@@ -264,6 +264,13 @@ require("lazy").setup({
           vim.tbl_extend("force", opts, { desc = "Previous Diagnostic" }))
         keymap("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end,
           vim.tbl_extend("force", opts, { desc = "Next Diagnostic" }))
+
+        -- Inlay hints toggle keymap (available for all LSP clients that support it)
+        if client.server_capabilities.inlayHintProvider then
+          keymap("n", "<leader>ih", function()
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+          end, vim.tbl_extend("force", opts, { desc = "Toggle [I]nlay [H]ints" }))
+        end
       end
 
 
@@ -288,7 +295,7 @@ require("lazy").setup({
 
           -- Enable inlay hints if supported
           if client.server_capabilities.inlayHintProvider then
-            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+            vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
           end
         end,
         capabilities = capabilities,

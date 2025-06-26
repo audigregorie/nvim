@@ -102,13 +102,6 @@ end
 
 vim.keymap.set("n", "<leader>`", toggle_boolean, { noremap = true, silent = true, desc = "Toggle true/false" })
 
--- Toggle LSP inlay hints
-vim.keymap.set("n", "<leader>ih", function()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
-  vim.lsp.inlay_hint.enable(not enabled, { bufnr = bufnr })
-end, { desc = "Toggle Inlay Hints" })
-
 -- Git preview hunk
 vim.keymap.set("n", "<leader>ph", ":Gitsigns preview_hunk<CR>", { noremap = true, desc = "Gitsigns: preview [h]unk" })
 vim.keymap.set("n", "<leader>gb", ":Git blame<CR>", { noremap = true, desc = "Git: blame" })
