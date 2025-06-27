@@ -1,457 +1,598 @@
 return {
-  -- Angular-specific enhancements
-  {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile", "BufWritePre" },
-    cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
-    dependencies = {
-      {
-        "nvim-treesitter/nvim-treesitter-textobjects",
-        event = "VeryLazy",
-      },
-    },
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = {
-          "angular",
-          "typescript",
-          "javascript",
-          "html",
-          "css",
-          "scss",
-          "json",
-          "yaml",
-          "lua",
-          "vim",
-        },
-        auto_install = true,
-        sync_install = false,
-        ignore_install = {},
-        modules = {},
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = false,
-        },
-        indent = { enable = true },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
-              ["ac"] = "@class.outer",
-              ["ic"] = "@class.inner",
-              ["aa"] = "@parameter.outer",
-              ["ia"] = "@parameter.inner",
-              ["al"] = "@loop.outer",
-              ["il"] = "@loop.inner",
-              ["ab"] = "@block.outer",
-              ["ib"] = "@block.inner",
-            },
-          },
-        },
-      })
-    end,
-  },
+	-- Angular-specific enhancements
+	{
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+		event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+		cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
+		dependencies = {
+			{
+				"nvim-treesitter/nvim-treesitter-textobjects",
+				event = "VeryLazy",
+			},
+		},
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				ensure_installed = {
+					"angular",
+					"typescript",
+					"javascript",
+					"html",
+					"css",
+					"scss",
+					"json",
+					"yaml",
+					"lua",
+					"vim",
+				},
+				auto_install = true,
+				sync_install = false,
+				ignore_install = {},
+				modules = {},
+				highlight = {
+					enable = true,
+					additional_vim_regex_highlighting = false,
+				},
+				indent = { enable = true },
+				textobjects = {
+					select = {
+						enable = true,
+						lookahead = true,
+						keymaps = {
+							["af"] = "@function.outer",
+							["if"] = "@function.inner",
+							["ac"] = "@class.outer",
+							["ic"] = "@class.inner",
+							["aa"] = "@parameter.outer",
+							["ia"] = "@parameter.inner",
+							["al"] = "@loop.outer",
+							["il"] = "@loop.inner",
+							["ab"] = "@block.outer",
+							["ib"] = "@block.inner",
+						},
+					},
+				},
+			})
+		end,
+	},
 
-  -- Null-ls for formatting and diagnostics
-  {
-    "nvimtools/none-ls.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvimtools/none-ls-extras.nvim", -- Needed for eslint_d
-    },
-    event = { "BufReadPre", "BufNewFile" },
-    config = function()
-      local null_ls = require("null-ls")
-      local formatting = require("none-ls.formatting.eslint_d")
-      -- local diagnostics = require("none-ls.diagnostics.eslint_d")
+	-- Null-ls for formatting and diagnostics
+	{
+		"nvimtools/none-ls.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvimtools/none-ls-extras.nvim", -- Needed for eslint_d
+		},
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			local null_ls = require("null-ls")
+			local formatting = require("none-ls.formatting.eslint_d")
+			-- local diagnostics = require("none-ls.diagnostics.eslint_d")
 
-      null_ls.setup({
-        sources = {
-          -- -- Only register eslint_d diagnostics if .eslintrc* is present
-          -- diagnostics.with({
-          --   condition = function(utils)
-          --     return utils.root_has_file({
-          --       ".eslintrc",
-          --       ".eslintrc.js",
-          --       ".eslintrc.cjs",
-          --       ".eslintrc.json",
-          --       ".eslintrc.yaml",
-          --       ".eslintrc.yml",
-          --     })
-          --   end,
-          --   filetypes = { "javascript", "typescript", },
-          -- }),
+			null_ls.setup({
+				sources = {
+					-- -- Only register eslint_d diagnostics if .eslintrc* is present
+					-- diagnostics.with({
+					--   condition = function(utils)
+					--     return utils.root_has_file({
+					--       ".eslintrc",
+					--       ".eslintrc.js",
+					--       ".eslintrc.cjs",
+					--       ".eslintrc.json",
+					--       ".eslintrc.yaml",
+					--       ".eslintrc.yml",
+					--     })
+					--   end,
+					--   filetypes = { "javascript", "typescript", },
+					-- }),
 
-          -- Only register eslint_d formatting if .eslintrc* is present
-          formatting.with({
-            condition = function(utils)
-              return utils.root_has_file({
-                ".eslintrc",
-                ".eslintrc.js",
-                ".eslintrc.cjs",
-                ".eslintrc.json",
-                ".eslintrc.yaml",
-                ".eslintrc.yml",
-              })
-            end,
-            filetypes = { "javascript", "typescript", },
-          }),
+					-- Only register eslint_d formatting if .eslintrc* is present
+					formatting.with({
+						condition = function(utils)
+							return utils.root_has_file({
+								".eslintrc",
+								".eslintrc.js",
+								".eslintrc.cjs",
+								".eslintrc.json",
+								".eslintrc.yaml",
+								".eslintrc.yml",
+							})
+						end,
+						filetypes = { "javascript", "typescript" },
+					}),
 
-          -- Prettier (conditionally enabled by presence of Prettier config)
-          null_ls.builtins.formatting.prettierd.with({
-            condition = function(utils)
-              return utils.root_has_file({
-                ".prettierrc",
-                ".prettierrc.js",
-                ".prettierrc.json",
-                ".prettierrc.yaml",
-                ".prettierrc.yml",
-                "prettier.config.js",
-                "prettier.config.cjs",
-              })
-            end,
-          }),
-        },
+					-- Prettier (conditionally enabled by presence of Prettier config)
+					null_ls.builtins.formatting.prettierd.with({
+						condition = function(utils)
+							return utils.root_has_file({
+								".prettierrc",
+								".prettierrc.js",
+								".prettierrc.json",
+								".prettierrc.yaml",
+								".prettierrc.yml",
+								"prettier.config.js",
+								"prettier.config.cjs",
+							})
+						end,
+					}),
+				},
 
-        -- on_attach = function(client, bufnr)
-        --   if client.supports_method("textDocument/formatting") then
-        --     local augroup = vim.api.nvim_create_augroup("LspFormatting", { clear = true })
-        --     vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-        --     vim.api.nvim_create_autocmd("BufWritePre", {
-        --       group = augroup,
-        --       buffer = bufnr,
-        --       callback = function()
-        --         vim.lsp.buf.format({ bufnr = bufnr, async = false })
-        --       end,
-        --     })
-        --   end
-        -- end,
-      })
-    end,
-  },
+				-- on_attach = function(client, bufnr)
+				--   if client.supports_method("textDocument/formatting") then
+				--     local augroup = vim.api.nvim_create_augroup("LspFormatting", { clear = true })
+				--     vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+				--     vim.api.nvim_create_autocmd("BufWritePre", {
+				--       group = augroup,
+				--       buffer = bufnr,
+				--       callback = function()
+				--         vim.lsp.buf.format({ bufnr = bufnr, async = false })
+				--       end,
+				--     })
+				--   end
+				-- end,
+			})
+		end,
+	},
 
-  -- LSP Configuration
-  {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      { "b0o/schemastore.nvim", lazy = true },
-    },
-    event = { "BufReadPre", "BufNewFile" },
-    config = function()
-      -- Enable inline diagnostics
-      vim.diagnostic.config({
-        virtual_text = {
-          prefix = "●",
-          spacing = 2,
-        },
-        signs = true,
-        underline = true,
-        update_in_insert = false,
-        severity_sort = true,
-      })
+	-- Prettier formatting
+	{
+		"MunifTanjim/prettier.nvim",
+		event = "BufWritePre", -- Auto-load when a buffer is written
+		config = function()
+			require("prettier").setup({
+				bin = "prettier",
+				filetypes = {
+					"css",
+					"graphql",
+					"html",
+					"javascript",
+					"javascriptreact",
+					"json",
+					"less",
+					"markdown",
+					"scss",
+					"typescript",
+					"typescriptreact",
+					"yaml",
+				},
+				cli_options = {
+					config_precedence = "prefer-file",
+				},
+			})
+		end,
+	},
 
-      local lspconfig = require("lspconfig")
+	-- StyLua for Lua formatting using null-ls
+	{
+		"nvimtools/none-ls.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			local null_ls = require("null-ls")
+			local b = null_ls.builtins
 
-      -- Common on_attach function for format-on-save
-      local function common_on_attach(client, bufnr)
-        if client.server_capabilities.documentFormattingProvider then
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            buffer = bufnr,
-            callback = function()
-              vim.lsp.buf.format({ bufnr = bufnr })
-            end,
-          })
-        end
-        -- LSP Keymaps
-        local opts = { noremap = true, silent = true, buffer = bufnr }
-        local keymap = vim.keymap.set
-        keymap("n", "gd", require("telescope.builtin").lsp_definitions,
-          vim.tbl_extend("force", opts, { desc = "[G]oto [D]efinition" }))
-        keymap("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "[G]oto [D]eclaration" }))
-        keymap("n", "gr", require("telescope.builtin").lsp_references,
-          vim.tbl_extend("force", opts, { desc = "[G]oto [R]eferences" }))
-        keymap("n", "gi", require("telescope.builtin").lsp_implementations,
-          vim.tbl_extend("force", opts, { desc = "[G]oto [I]mplementation" }))
-        keymap("n", "gt", require("telescope.builtin").lsp_type_definitions,
-          vim.tbl_extend("force", opts, { desc = "[G]oto [T]ype Definition" }))
-        keymap("n", "ds", require("telescope.builtin").lsp_document_symbols,
-          vim.tbl_extend("force", opts, { desc = "[D]ocument [S]ymbols" }))
-        keymap("n", "ws", require("telescope.builtin").lsp_dynamic_workspace_symbols,
-          vim.tbl_extend("force", opts, { desc = "[W]orkspace [S]ymbols" }))
-        keymap("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover Documentation" }))
-        keymap("i", "<C-k>", vim.lsp.buf.signature_help, vim.tbl_extend("force", opts, { desc = "Signature Help" }))
-        keymap("n", "<leader>rn", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "[R]e[n]ame" }))
-        keymap({ "n", "x" }, "<leader>ca", vim.lsp.buf.code_action,
-          vim.tbl_extend("force", opts, { desc = "[C]ode [A]ction" }))
-        keymap("n", "<leader>f", function()
-          vim.lsp.buf.format({ async = true })
-        end, vim.tbl_extend("force", opts, { desc = "Format Buffer" }))
-        keymap("n", "<leader>d", vim.diagnostic.open_float, vim.tbl_extend("force", opts, { desc = "Show Diagnostics" }))
-        keymap("n", "<leader>wd", require("telescope.builtin").diagnostics,
-          vim.tbl_extend("force", opts, { desc = "[W]orkspace [D]iagnostics" }))
-        keymap("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end,
-          vim.tbl_extend("force", opts, { desc = "Previous Diagnostic" }))
-        keymap("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end,
-          vim.tbl_extend("force", opts, { desc = "Next Diagnostic" }))
+			null_ls.setup({
+				sources = {
+					b.formatting.stylua.with({
+						filetypes = { "lua" },
+						-- Optional: Specify the Stylua binary if it's not in your PATH
+						-- bin = "/usr/local/bin/stylua",
+						-- Optional: Add extra arguments for StyLua if needed (e.g., config file)
+						-- args = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },
+					}),
+				},
+				-- Automatic formatting on save for none-ls sources (like StyLua)
+				on_attach = function(client, bufnr)
+					if client.supports_method("textDocument/formatting") then
+						-- Create a named augroup to clear previous autocommands for this buffer
+						-- This prevents duplicate autocommands if on_attach is called multiple times for a buffer
+						vim.api.nvim_create_augroup("NoneLSPFormatting", { clear = true })
+						vim.api.nvim_create_autocmd("BufWritePre", {
+							group = "NoneLSPFormatting",
+							buffer = bufnr,
+							callback = function()
+								vim.lsp.buf.format({ bufnr = bufnr, async = false })
+							end,
+						})
+					end
+				end,
+			})
+		end,
+	},
 
-        -- Inlay hints toggle keymap (available for all LSP clients that support it)
-        if client.server_capabilities.inlayHintProvider then
-          keymap("n", "<leader>ih", function()
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-          end, vim.tbl_extend("force", opts, { desc = "Toggle [I]nlay [H]ints" }))
-        end
-      end
+	-- LSP Configuration
+	{
+		"neovim/nvim-lspconfig",
+		dependencies = {
+			{ "b0o/schemastore.nvim", lazy = true },
+			{ "williamboman/mason.nvim", config = true },
+			{ "williamboman/mason-lspconfig.nvim", config = true },
+		},
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			-- Enable inline diagnostics
+			vim.diagnostic.config({
+				virtual_text = {
+					prefix = "●",
+					spacing = 2,
+				},
+				signs = true,
+				underline = true,
+				update_in_insert = false,
+				severity_sort = true,
+			})
 
+			local lspconfig = require("lspconfig")
 
-      local capabilities = vim.tbl_deep_extend(
-        "force",
-        vim.lsp.protocol.make_client_capabilities(),
-        require("cmp_nvim_lsp").default_capabilities()
-      )
+			-- Common on_attach function for format-on-save
+			local function common_on_attach(client, bufnr)
+				-- Crucially, disable document formatting capabilities for ALL LSP clients
+				-- This ensures that only none-ls (for StyLua) and prettier.nvim (for Prettier) handle formatting.
+				client.server_capabilities.documentFormattingProvider = false
+				client.server_capabilities.documentRangeFormattingProvider = false
 
-      -- Angular Language Server
-      lspconfig.angularls.setup({
-        on_attach = common_on_attach,
-        capabilities = capabilities,
-        root_dir = lspconfig.util.root_pattern("angular.json", "tsconfig.json", ".git"),
-        init_options = {
-          typescript = {
-            preferences = {
-              -- Disable TypeScript completions from Angular LS to avoid duplicates
-              disableSuggestions = true,
-            }
-          }
-        }
-      })
+				-- LSP Keymaps
+				local opts = { noremap = true, silent = true, buffer = bufnr }
+				local keymap = vim.keymap.set
+				keymap(
+					"n",
+					"gd",
+					require("telescope.builtin").lsp_definitions,
+					vim.tbl_extend("force", opts, { desc = "[G]oto [D]efinition" })
+				)
+				keymap(
+					"n",
+					"gD",
+					vim.lsp.buf.declaration,
+					vim.tbl_extend("force", opts, { desc = "[G]oto [D]eclaration" })
+				)
+				keymap(
+					"n",
+					"gr",
+					require("telescope.builtin").lsp_references,
+					vim.tbl_extend("force", opts, { desc = "[G]oto [R]eferences" })
+				)
+				keymap(
+					"n",
+					"gi",
+					require("telescope.builtin").lsp_implementations,
+					vim.tbl_extend("force", opts, { desc = "[G]oto [I]mplementation" })
+				)
+				keymap(
+					"n",
+					"gt",
+					require("telescope.builtin").lsp_type_definitions,
+					vim.tbl_extend("force", opts, { desc = "[G]oto [T]ype Definition" })
+				)
+				keymap(
+					"n",
+					"ds",
+					require("telescope.builtin").lsp_document_symbols,
+					vim.tbl_extend("force", opts, { desc = "[D]ocument [S]ymbols" })
+				)
+				keymap(
+					"n",
+					"ws",
+					require("telescope.builtin").lsp_dynamic_workspace_symbols,
+					vim.tbl_extend("force", opts, { desc = "[W]orkspace [S]ymbols" })
+				)
+				keymap("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover Documentation" }))
+				keymap(
+					"i",
+					"<C-k>",
+					vim.lsp.buf.signature_help,
+					vim.tbl_extend("force", opts, { desc = "Signature Help" })
+				)
+				keymap("n", "<leader>rn", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "[R]e[n]ame" }))
+				keymap(
+					{ "n", "x" },
+					"<leader>ca",
+					vim.lsp.buf.code_action,
+					vim.tbl_extend("force", opts, { desc = "[C]ode [A]ction" })
+				)
+				keymap(
+					"n",
+					"<leader>d",
+					vim.diagnostic.open_float,
+					vim.tbl_extend("force", opts, { desc = "Show Diagnostics" })
+				)
+				keymap(
+					"n",
+					"<leader>wd",
+					require("telescope.builtin").diagnostics,
+					vim.tbl_extend("force", opts, { desc = "[W]orkspace [D]iagnostics" })
+				)
+				keymap("n", "[d", function()
+					vim.diagnostic.jump({ count = -1 })
+				end, vim.tbl_extend("force", opts, { desc = "Previous Diagnostic" }))
+				keymap("n", "]d", function()
+					vim.diagnostic.jump({ count = 1 })
+				end, vim.tbl_extend("force", opts, { desc = "Next Diagnostic" }))
 
-      -- TypeScript Server
-      lspconfig.ts_ls.setup({
-        on_attach = function(client, bufnr)
-          vim.api.nvim_buf_set_option(bufnr, "formatexpr", "")
-          common_on_attach(client, bufnr)
+				-- Inlay hints toggle keymap (available for all LSP clients that support it)
+				if client.server_capabilities.inlayHintProvider then
+					keymap("n", "<leader>ih", function()
+						vim.lsp.inlay_hint.enable(
+							not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }),
+							{ bufnr = bufnr }
+						)
+					end, vim.tbl_extend("force", opts, { desc = "Toggle [I]nlay [H]ints" }))
+				end
+			end
 
-          -- Enable inlay hints if supported
-          if client.server_capabilities.inlayHintProvider then
-            vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
-          end
-        end,
-        capabilities = capabilities,
-        root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", ".git"),
-        settings = {
-          typescript = {
-            inlayHints = {
-              includeInlayParameterNameHints = "all",
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayEnumMemberValueHints = true,
-            },
-          },
-        },
-      })
+			local capabilities = vim.tbl_deep_extend(
+				"force",
+				vim.lsp.protocol.make_client_capabilities(),
+				require("cmp_nvim_lsp").default_capabilities()
+			)
 
-      -- CSS Language Server
-      lspconfig.cssls.setup({
-        on_attach = common_on_attach,
-        capabilities = capabilities,
-      })
+			-- Angular Language Server
+			lspconfig.angularls.setup({
+				on_attach = common_on_attach,
+				capabilities = capabilities,
+				root_dir = lspconfig.util.root_pattern("angular.json", "tsconfig.json", ".git"),
+				init_options = {
+					typescript = {
+						preferences = {
+							-- Disable TypeScript completions from Angular LS to avoid duplicates
+							disableSuggestions = true,
+						},
+					},
+				},
+			})
 
-      -- JSON Language Server
-      lspconfig.jsonls.setup({
-        on_attach = common_on_attach,
-        capabilities = capabilities,
-        settings = {
-          json = {
-            schemas = require("schemastore").json.schemas(), -- optional
-            validate = { enable = true },
-          },
-        },
-      })
+			-- TypeScript Server
+			lspconfig.ts_ls.setup({
+				on_attach = function(client, bufnr)
+					vim.api.nvim_buf_set_option(bufnr, "formatexpr", "")
+					common_on_attach(client, bufnr)
 
-      -- Tailwind CSS Language Server
-      lspconfig.tailwindcss.setup({
-        on_attach = common_on_attach,
-        capabilities = capabilities,
-        root_dir = lspconfig.util.root_pattern(
-          "tailwind.config.js",
-          "tailwind.config.ts",
-          "postcss.config.js",
-          "package.json",
-          ".git"
-        ),
-      })
+					-- Enable inlay hints if supported
+					if client.server_capabilities.inlayHintProvider then
+						vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+					end
+				end,
+				capabilities = capabilities,
+				root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", ".git"),
+				settings = {
+					typescript = {
+						inlayHints = {
+							includeInlayParameterNameHints = "all",
+							includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+							includeInlayFunctionParameterTypeHints = true,
+							includeInlayVariableTypeHints = true,
+							includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+							includeInlayPropertyDeclarationTypeHints = true,
+							includeInlayFunctionLikeReturnTypeHints = true,
+							includeInlayEnumMemberValueHints = true,
+						},
+					},
+				},
+			})
 
-      -- Lua Language Server
-      lspconfig.lua_ls.setup({
-        on_attach = common_on_attach,
-        capabilities = capabilities,
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { "vim" },
-            },
-            workspace = {
-              library = vim.api.nvim_get_runtime_file("", true),
-              checkThirdParty = false,
-            },
-          },
-        },
-      })
-    end,
-  },
+			-- CSS Language Server
+			lspconfig.cssls.setup({
+				on_attach = common_on_attach,
+				capabilities = capabilities,
+			})
 
-  -- Fidget (LSP Progress UI)
-  {
-    "j-hui/fidget.nvim",
-    tag = "legacy", -- Optional: remove if you're using the latest version
-    event = "LspAttach",
-    config = function()
-      require("fidget").setup({})
-    end,
-  },
+			-- JSON Language Server
+			lspconfig.jsonls.setup({
+				on_attach = common_on_attach,
+				capabilities = capabilities,
+				settings = {
+					json = {
+						schemas = require("schemastore").json.schemas(), -- optional
+						validate = { enable = true },
+					},
+				},
+			})
 
-  -- Lspsaga (LSP UI Enhancements)
-  {
-    "nvimdev/lspsaga.nvim",
-    event = "LspAttach",
-    config = function()
-      require("lspsaga").setup({
-        lightbulb = {
-          enable = true,
-          enable_in_insert = false,
-          sign = true,
-          virtual_text = false,
-        },
-      })
-    end,
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter", -- optional but improves UI
-      "nvim-tree/nvim-web-devicons",     -- optional for icons
-    },
-  },
+			-- Tailwind CSS Language Server
+			lspconfig.tailwindcss.setup({
+				on_attach = common_on_attach,
+				capabilities = capabilities,
+				root_dir = lspconfig.util.root_pattern(
+					"tailwind.config.js",
+					"tailwind.config.ts",
+					"postcss.config.js",
+					"package.json",
+					".git"
+				),
+			})
 
-  -- lspkind (VSCode-like pictograms)
-  {
-    "onsails/lspkind.nvim",
-    lazy = true,
-  },
+			-- Lua Language Server
+			lspconfig.lua_ls.setup({
+				on_attach = common_on_attach,
+				capabilities = capabilities,
+				settings = {
+					Lua = {
+						diagnostics = {
+							globals = { "vim" },
+						},
+						workspace = {
+							library = vim.api.nvim_get_runtime_file("", true),
+							checkThirdParty = false,
+						},
+					},
+				},
+			})
 
-  -- mason.nvim (LSP/DAP/Tool installer)
-  {
-    "williamboman/mason.nvim",
-    build = ":MasonUpdate",
-    cmd = "Mason",
-    config = function()
-      require("mason").setup()
-    end,
-  },
+			-- ESLint Language Server for diagnostics
+			lspconfig.eslint.setup({
+				on_attach = common_on_attach,
+				capabilities = capabilities,
+				settings = {
+					workingDirectories = { mode = "auto" },
+					format = false, -- Ensure ESLint's own formatter is off
+				},
+				root_dir = lspconfig.util.root_pattern(
+					".eslintrc.js",
+					".eslintrc.cjs",
+					".eslintrc.json",
+					"package.json"
+				),
+				filetypes = {
+					"javascript",
+					"javascriptreact",
+					"typescript",
+					"typescriptreact",
+					"vue",
+					"html",
+					"json",
+					"yaml", -- Add filetypes ESLint should lint
+				},
+			})
+		end,
+	},
 
-  -- mason-lspconfig (bridge between mason and lspconfig)
-  {
-    "williamboman/mason-lspconfig.nvim",
-    dependencies = { "williamboman/mason.nvim" },
-    event = { "BufReadPre", "BufNewFile" },
-    config = function()
-      require("mason-lspconfig").setup({
-        ensure_installed = {
-          "ts_ls",
-          "angularls",
-          "cssls",
-          "jsonls",
-          "tailwindcss",
-          "lua_ls",
-        },
-        automatic_installation = true,
-        automatic_enable = true
-      })
-    end,
-  },
+	-- Fidget (LSP Progress UI)
+	{
+		"j-hui/fidget.nvim",
+		tag = "legacy", -- Optional: remove if you're using the latest version
+		event = "LspAttach",
+		config = function()
+			require("fidget").setup({})
+		end,
+	},
 
-  -- nvim-cmp (main completion engine)
-  {
-    "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-      "hrsh7th/cmp-cmdline",
-      "saadparwaiz1/cmp_luasnip",
-      "rafamadriz/friendly-snippets",
-    },
-    config = function()
-      local cmp = require("cmp")
-      local luasnip = require("luasnip")
-      local lspkind = require("lspkind")
+	-- Lspsaga (LSP UI Enhancements)
+	{
+		"nvimdev/lspsaga.nvim",
+		event = "LspAttach",
+		config = function()
+			require("lspsaga").setup({
+				lightbulb = {
+					enable = true,
+					enable_in_insert = false,
+					sign = true,
+					virtual_text = false,
+				},
+			})
+		end,
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter", -- optional but improves UI
+			"nvim-tree/nvim-web-devicons", -- optional for icons
+		},
+	},
 
-      require("luasnip.loaders.from_vscode").lazy_load()
+	-- lspkind (VSCode-like pictograms)
+	{
+		"onsails/lspkind.nvim",
+		lazy = true,
+	},
 
-      cmp.setup({
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
-        mapping = cmp.mapping.preset.insert({
-          ["<C-k>"] = cmp.mapping.select_prev_item(),
-          ["<C-j>"] = cmp.mapping.select_next_item(),
-          ["<C-u>"] = cmp.mapping.scroll_docs(-4),
-          ["<C-d>"] = cmp.mapping.scroll_docs(4),
-          ["<C-Space>"] = cmp.mapping.complete(),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        }),
-        sources = cmp.config.sources({
-          { name = "nvim_lsp", priority = 1000 },
-          { name = "luasnip",  priority = 750 },
-          { name = "buffer",   priority = 500 },
-          { name = "path",     priority = 250 },
-        }),
-        formatting = {
-          format = lspkind.cmp_format({
-            mode = "symbol_text",
-            maxwidth = 50,
-            ellipsis_char = "...",
-          }),
-        },
-      })
+	-- mason.nvim (LSP/DAP/Tool installer)
+	{
+		"williamboman/mason.nvim",
+		build = ":MasonUpdate",
+		cmd = "Mason",
+		config = function()
+			require("mason").setup()
+		end,
+	},
 
-      cmp.setup.cmdline("/", {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = "buffer" },
-        },
-      })
+	-- mason-lspconfig (bridge between mason and lspconfig)
+	{
+		"williamboman/mason-lspconfig.nvim",
+		dependencies = { "williamboman/mason.nvim" },
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			require("mason-lspconfig").setup({
+				ensure_installed = {
+					"ts_ls",
+					"angularls",
+					"cssls",
+					"jsonls",
+					"tailwindcss",
+					"lua_ls",
+				},
+				automatic_installation = true,
+				automatic_enable = true,
+			})
+		end,
+	},
 
-      cmp.setup.cmdline(":", {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-          { name = "path" },
-        }, {
-          { name = "cmdline" },
-        }),
-      })
-    end,
-  },
+	-- nvim-cmp (main completion engine)
+	{
+		"hrsh7th/nvim-cmp",
+		event = "InsertEnter",
+		dependencies = {
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-cmdline",
+			"saadparwaiz1/cmp_luasnip",
+			"rafamadriz/friendly-snippets",
+		},
+		config = function()
+			local cmp = require("cmp")
+			local luasnip = require("luasnip")
+			local lspkind = require("lspkind")
 
-  -- LuaSnip (Snippet engine)
-  {
-    "L3MON4D3/LuaSnip",
-    dependencies = { "rafamadriz/friendly-snippets" },
-    build = "make install_jsregexp", -- optional if using regex-based snippets
-    event = "InsertEnter",
-    config = function()
-      require("luasnip.loaders.from_vscode").lazy_load()
-      require("luasnip").config.set_config({
-        history = true,
-        updateevents = "TextChanged,TextChangedI",
-      })
-    end,
-  },
+			require("luasnip.loaders.from_vscode").lazy_load()
+
+			cmp.setup({
+				snippet = {
+					expand = function(args)
+						luasnip.lsp_expand(args.body)
+					end,
+				},
+				mapping = cmp.mapping.preset.insert({
+					["<C-k>"] = cmp.mapping.select_prev_item(),
+					["<C-j>"] = cmp.mapping.select_next_item(),
+					["<C-u>"] = cmp.mapping.scroll_docs(-4),
+					["<C-d>"] = cmp.mapping.scroll_docs(4),
+					["<C-Space>"] = cmp.mapping.complete(),
+					["<CR>"] = cmp.mapping.confirm({ select = true }),
+				}),
+				sources = cmp.config.sources({
+					{ name = "nvim_lsp", priority = 1000 },
+					{ name = "luasnip", priority = 750 },
+					{ name = "buffer", priority = 500 },
+					{ name = "path", priority = 250 },
+				}),
+				formatting = {
+					format = lspkind.cmp_format({
+						mode = "symbol_text",
+						maxwidth = 50,
+						ellipsis_char = "...",
+					}),
+				},
+			})
+
+			cmp.setup.cmdline("/", {
+				mapping = cmp.mapping.preset.cmdline(),
+				sources = {
+					{ name = "buffer" },
+				},
+			})
+
+			cmp.setup.cmdline(":", {
+				mapping = cmp.mapping.preset.cmdline(),
+				sources = cmp.config.sources({
+					{ name = "path" },
+				}, {
+					{ name = "cmdline" },
+				}),
+			})
+		end,
+	},
+
+	-- LuaSnip (Snippet engine)
+	{
+		"L3MON4D3/LuaSnip",
+		dependencies = { "rafamadriz/friendly-snippets" },
+		build = "make install_jsregexp", -- optional if using regex-based snippets
+		event = "InsertEnter",
+		config = function()
+			require("luasnip.loaders.from_vscode").lazy_load()
+			require("luasnip").config.set_config({
+				history = true,
+				updateevents = "TextChanged,TextChangedI",
+			})
+		end,
+	},
 }

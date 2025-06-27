@@ -7,6 +7,10 @@ return { -- Supermaven.nvim
 				clear_suggestion = "<C-w>",
 				accept_word = "<leader>l",
 			},
+			color = {
+				suggestion_color = "#a1a1a1",
+				cterm = 244,
+			},
 		})
 	end,
 }
