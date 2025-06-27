@@ -21,7 +21,7 @@ return {
   config = function()
     require('oil').setup {
       columns = {
-        'size',
+        -- 'size',
         'icon',
       },
       view_options = {
