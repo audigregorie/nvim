@@ -9,6 +9,8 @@ return {
         return vim.fn.executable("make") == 1
       end,
     },
+    "nvim-telescope/telescope-ui-select.nvim",      -- Better UI for vim.ui.select
+    "nvim-telescope/telescope-live-grep-args.nvim", -- Live grep with args
   },
   cmd = "Telescope",
   config = function()
@@ -46,7 +48,31 @@ return {
           "^.git/",
           "^node_modules/",
           "^dist/",
+          "^build/",
+          "^target/",
+          "%.lock$",
           "package-lock.json",
+          "yarn.lock",
+          "%.min.js$",
+          "%.min.css$",
+          "__pycache__/",
+          "%.pyc$",
+          "%.o$",
+          "%.class$",
+        },
+        vimgrep_arguments = {
+          "rg",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+          "--hidden",
+          "--glob=!.git/",
+        },
+        cache_picker = {
+          num_pickers = 5,
         },
         mappings = {
           i = {
@@ -92,8 +118,9 @@ return {
         grep_string = { word_match = "-w" },
         live_grep = {
           additional_args = function()
-            return { "--hidden" }
+            return { "--hidden", "--glob", "!**/.git/*" }
           end,
+          glob_pattern = "!{package-lock.json,yarn.lock}",
         },
       },
       extensions = {
@@ -117,6 +144,8 @@ return {
     -- Load the extension
     telescope.load_extension("fzf")
     telescope.load_extension("file_browser")
+    telescope.load_extension("ui-select")
+    telescope.load_extension("live_grep_args")
 
     -- Keymap to open file browser in the folder of the current file
     vim.keymap.set("n", "<leader>fb", function()
@@ -133,10 +162,17 @@ return {
     end, { desc = "Find Files (Git Project Root)" })
 
     -- Keymap for live grep to search any word in the root folder
-    vim.keymap.set("n", "<leader>fg", function()
+    vim.keymap.set("n", "<leader>sg", function()
       require("telescope.builtin").live_grep({
-        -- cwd = get_git_root(), -- Uncomment if you want to search from git root
+        s -- cwd = get_git_root(), -- Uncomment if you want to search from git root
       })
     end, { desc = "Live Grep (Search Text)" })
+
+    -- vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Find Buffers" })
+    -- vim.keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { desc = "Find Help" })
+    vim.keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Recent Files" })
+    vim.keymap.set("n", "<leader>fc", "<cmd>Telescope commands<cr>", { desc = "Find Commands" })
+    vim.keymap.set("n", "<leader>fk", "<cmd>Telescope keymaps<cr>", { desc = "Find Keymaps" })
+    vim.keymap.set("n", "<leader>fs", "<cmd>Telescope git_status<cr>", { desc = "Git Status" })
   end,
 }
