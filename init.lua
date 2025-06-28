@@ -25,6 +25,7 @@ require("lazy").setup({
 	-- Require plugins into the config
 	require("plugins.autopairs"),
 	require("plugins.avante"),
+	require("plugins.bmessages"),
 	require("plugins.claudecode"),
 	require("plugins.codesnap"),
 	require("plugins.colorscheme"),

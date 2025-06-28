@@ -1,4 +1,7 @@
 return {
+	------------------------------------------------------------------
+	-- Feature: Treesitter for syntax parsing
+	------------------------------------------------------------------
 	-- Angular-specific enhancements
 	{
 		"nvim-treesitter/nvim-treesitter",
@@ -56,107 +59,54 @@ return {
 		end,
 	},
 
-	-- None-ls for formatting
-	{
-		"nvimtools/none-ls.nvim",
-		-- `plenary` is a common dependency for many plugins.
-		dependencies = { "nvim-lua/plenary.nvim" },
-		-- Load none-ls on startup or when you open a file.
-		event = { "BufReadPre", "BufNewFile" },
-		config = function()
-			-- Import the none-ls module.
-			local null_ls = require("null-ls")
-
-			-- Define references to the built-in sources for convenience.
-			local formatting = null_ls.builtins.formatting
-
-			-- Configure none-ls.
-			null_ls.setup({
-				sources = {
-					-- `prettierd` is a daemonized version of Prettier for faster performance.
-					-- Make sure you have `prettierd` installed globally (`npm i -g @fsouza/prettierd`).
-					formatting.prettierd,
-
-					-- For Lua file formatting
-					formatting.stylua,
-				},
-
-				-- The `on_attach` function is the recommended way to set up
-				-- format-on-save and other buffer-specific settings.
-				-- This function is called whenever none-ls attaches to a buffer.
-				on_attach = function(client, bufnr)
-					-- Check if the client attached to the buffer supports formatting.
-					if client.supports_method("textDocument/formatting") then
-						-- Create a command to allow manual formatting.
-						-- You can run it with `:Format`
-						vim.api.nvim_create_user_command("Format", function()
-							vim.lsp.buf.format({ bufnr = bufnr, async = true })
-						end, { desc = "Format current buffer with none-ls" })
-
-						-- Create an autocmd that will run the formatter on the buffer
-						-- before every write (`:w`).
-						vim.api.nvim_create_autocmd("BufWritePre", {
-							buffer = bufnr,
-							callback = function()
-								-- The `vim.lsp.buf.format` function sends a request to the LSP client
-								-- to format the buffer. `none-ls` acts as an LSP client.
-								vim.lsp.buf.format({
-									bufnr = bufnr,
-									-- `async = true` makes it non-blocking.
-									async = true,
-									-- You can add a filter here to specify which formatters to use.
-									-- If you have multiple formatters, you can do:
-									-- filter = function(c) return c.name == "prettierd" end,
-								})
-							end,
-						})
-					end
-				end,
-			})
-		end,
-	},
-
-	-- Linting
-	{
-		"mfussenegger/nvim-lint",
-		event = { "BufReadPre", "BufNewFile" },
-		config = function()
-			local lint = require("lint")
-
-			-- Configure the linters you want to use.
-			-- We are using 'eslint_d' for its performance benefits.
-			-- Make sure you have it installed globally: npm install -g eslint_d
-			lint.linters_by_ft = {
-				javascript = { "eslint_d" },
-				typescript = { "eslint_d" },
-				javascriptreact = { "eslint_d" },
-				typescriptreact = { "eslint_d" },
-				-- You can add other linters for other filetypes here.
-				-- For example:
-				lua = { "luacheck" },
-			}
-
-			-- Create an autocmd to run linting on specific events.
-			-- This will run the linter automatically when you save a file,
-			-- open a file, or leave insert mode.
-			vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
-				group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
-				callback = function()
-					lint.try_lint()
-				end,
-			})
-		end,
-	},
-
+	------------------------------------------------------------------
+	-- Feature: Language Server Protocol (LSP)
+	------------------------------------------------------------------
 	-- LSP Configuration
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			-- These are optional but recommended plugins that enhance the LSP experience.
+			-- mason.nvim (LSP/DAP/Tool installer)
+			{
+				"williamboman/mason.nvim",
+				build = ":MasonUpdate",
+				cmd = "Mason",
+				config = function()
+					require("mason").setup()
+				end,
+			},
+			-- mason-lspconfig (bridge between mason and lspconfig)
+			{
+				"williamboman/mason-lspconfig.nvim",
+				-- --- This plugin is now a dependency and its config is here.
+				config = function()
+					require("mason-lspconfig").setup({
+						ensure_installed = { "ts_ls", "angularls", "cssls", "jsonls", "tailwindcss", "lua_ls" },
+						automatic_installation = true,
+						automatic_enable = true,
+					})
+				end,
+			},
+			-- LSP Progress UI
+			{
+				"j-hui/fidget.nvim",
+				tag = "legacy",
+				event = "LspAttach",
+				config = function()
+					require("fidget").setup({})
+				end,
+			},
+			-- LSP UI Enhancements
+			{
+				"nvimdev/lspsaga.nvim",
+				event = "LspAttach",
+				dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+				config = function()
+					require("lspsaga").setup({ lightbulb = { enable = true, enable_in_insert = false } })
+				end,
+			},
+			-- Json Schemas LSP Helper
 			{ "b0o/schemastore.nvim", lazy = true },
-			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig.nvim",
-			"hrsh7th/cmp-nvim-lsp",
 		},
 		event = { "BufReadPre", "BufNewFile" },
 		config = function()
@@ -389,91 +339,41 @@ return {
 		end,
 	},
 
-	-- Fidget (LSP Progress UI)
-	{
-		"j-hui/fidget.nvim",
-		tag = "legacy", -- Optional: remove if you're using the latest version
-		event = "LspAttach",
-		config = function()
-			require("fidget").setup({})
-		end,
-	},
-
-	-- Lspsaga (LSP UI Enhancements)
-	{
-		"nvimdev/lspsaga.nvim",
-		event = "LspAttach",
-		config = function()
-			require("lspsaga").setup({
-				lightbulb = {
-					enable = true,
-					enable_in_insert = false,
-					sign = true,
-					virtual_text = false,
-				},
-			})
-		end,
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter", -- optional but improves UI
-			"nvim-tree/nvim-web-devicons", -- optional for icons
-		},
-	},
-
-	-- lspkind (VSCode-like pictograms)
-	{
-		"onsails/lspkind.nvim",
-		lazy = true,
-	},
-
-	-- mason.nvim (LSP/DAP/Tool installer)
-	{
-		"williamboman/mason.nvim",
-		build = ":MasonUpdate",
-		cmd = "Mason",
-		config = function()
-			require("mason").setup()
-		end,
-	},
-
-	-- mason-lspconfig (bridge between mason and lspconfig)
-	{
-		"williamboman/mason-lspconfig.nvim",
-		dependencies = { "williamboman/mason.nvim" },
-		event = { "BufReadPre", "BufNewFile" },
-		config = function()
-			require("mason-lspconfig").setup({
-				ensure_installed = {
-					"ts_ls",
-					"angularls",
-					"cssls",
-					"jsonls",
-					"tailwindcss",
-					"lua_ls",
-				},
-				automatic_installation = true,
-				automatic_enable = true,
-			})
-		end,
-	},
-
+	------------------------------------------------------------------
+	-- Feature: Autocompletion
+	------------------------------------------------------------------
 	-- nvim-cmp (main completion engine)
 	{
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
 		dependencies = {
+			-- Sources for nvim-cmp
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-cmdline",
-			"saadparwaiz1/cmp_luasnip",
-			"rafamadriz/friendly-snippets",
+			-- Snippet Engine & Snippets
+			{
+				"L3MON4D3/LuaSnip",
+				dependencies = { "rafamadriz/friendly-snippets" },
+				build = "make install_jsregexp",
+			},
+
+			{ "saadparwaiz1/cmp_luasnip" },
+
+			-- UI for nvim-cmp
+			{ "onsails/lspkind.nvim", lazy = true },
 		},
 		config = function()
+			require("luasnip.loaders.from_vscode").lazy_load()
+			require("luasnip").config.set_config({
+				history = true,
+				updateevents = "TextChanged,TextChangedI",
+			})
+
 			local cmp = require("cmp")
 			local luasnip = require("luasnip")
 			local lspkind = require("lspkind")
-
-			require("luasnip.loaders.from_vscode").lazy_load()
 
 			cmp.setup({
 				snippet = {
@@ -522,17 +422,82 @@ return {
 		end,
 	},
 
-	-- LuaSnip (Snippet engine)
+	------------------------------------------------------------------
+	-- Feature: Formatting & Linting
+	------------------------------------------------------------------
+	-- None-ls for formatting
 	{
-		"L3MON4D3/LuaSnip",
-		dependencies = { "rafamadriz/friendly-snippets" },
-		build = "make install_jsregexp", -- optional if using regex-based snippets
-		event = "InsertEnter",
+		"nvimtools/none-ls.nvim",
+		-- `plenary` is a common dependency for many plugins.
+		dependencies = { "nvim-lua/plenary.nvim" },
+		-- Load none-ls on startup or when you open a file.
+		event = { "BufReadPre", "BufNewFile" },
 		config = function()
-			require("luasnip.loaders.from_vscode").lazy_load()
-			require("luasnip").config.set_config({
-				history = true,
-				updateevents = "TextChanged,TextChangedI",
+			-- Import the none-ls module.
+			local null_ls = require("null-ls")
+
+			-- Configure none-ls.
+			null_ls.setup({
+				sources = {
+					-- `prettierd` is a daemonized version of Prettier for faster performance.
+					-- Make sure you have `prettierd` installed globally (`npm i -g @fsouza/prettierd`).
+					null_ls.builtins.formatting.prettierd,
+
+					-- For Lua file formatting
+					null_ls.builtins.formatting.stylua,
+				},
+
+				-- The `on_attach` function is the recommended way to set up
+				-- format-on-save and other buffer-specific settings.
+				-- This function is called whenever none-ls attaches to a buffer.
+				on_attach = function(client, bufnr)
+					-- Check if the client attached to the buffer supports formatting.
+					if client.supports_method("textDocument/formatting") then
+						-- Create a command to allow manual formatting.
+						-- You can run it with `:Format`
+						vim.api.nvim_create_user_command("Format", function()
+							vim.lsp.buf.format({ bufnr = bufnr, async = true })
+						end, { desc = "Format current buffer with none-ls" })
+
+						-- Create an autocmd that will run the formatter on the buffer
+						-- before every write (`:w`).
+						vim.api.nvim_create_autocmd("BufWritePre", {
+							buffer = bufnr,
+							callback = function()
+								-- The `vim.lsp.buf.format` function sends a request to the LSP client
+								-- to format the buffer. `none-ls` acts as an LSP client.
+								vim.lsp.buf.format({
+									bufnr = bufnr,
+									-- `async = true` makes it non-blocking.
+									async = true,
+									-- You can add a filter here to specify which formatters to use.
+									-- If you have multiple formatters, you can do:
+									-- filter = function(c) return c.name == "prettierd" end,
+								})
+							end,
+						})
+					end
+				end,
+			})
+		end,
+	},
+
+	-- Linting
+	{
+		"mfussenegger/nvim-lint",
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			require("lint").linters_by_ft = {
+				javascript = { "eslint_d" },
+				typescript = { "eslint_d" },
+				lua = { "luacheck" },
+			}
+
+			vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
+				group = vim.api.nvim_create_augroup("nvim-lint-autogroup", { clear = true }),
+				callback = function()
+					require("lint").try_lint()
+				end,
 			})
 		end,
 	},
