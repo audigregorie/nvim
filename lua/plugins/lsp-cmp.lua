@@ -56,147 +56,93 @@ return {
 		end,
 	},
 
-	-- Null-ls for formatting and diagnostics
+	-- None-ls for formatting
 	{
 		"nvimtools/none-ls.nvim",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvimtools/none-ls-extras.nvim", -- Needed for eslint_d
-		},
+		-- `plenary` is a common dependency for many plugins.
+		dependencies = { "nvim-lua/plenary.nvim" },
+		-- Load none-ls on startup or when you open a file.
 		event = { "BufReadPre", "BufNewFile" },
 		config = function()
+			-- Import the none-ls module.
 			local null_ls = require("null-ls")
-			local formatting = require("none-ls.formatting.eslint_d")
-			-- local diagnostics = require("none-ls.diagnostics.eslint_d")
 
+			-- Define references to the built-in sources for convenience.
+			local formatting = null_ls.builtins.formatting
+
+			-- Configure none-ls.
 			null_ls.setup({
 				sources = {
-					-- -- Only register eslint_d diagnostics if .eslintrc* is present
-					-- diagnostics.with({
-					--   condition = function(utils)
-					--     return utils.root_has_file({
-					--       ".eslintrc",
-					--       ".eslintrc.js",
-					--       ".eslintrc.cjs",
-					--       ".eslintrc.json",
-					--       ".eslintrc.yaml",
-					--       ".eslintrc.yml",
-					--     })
-					--   end,
-					--   filetypes = { "javascript", "typescript", },
-					-- }),
+					-- `prettierd` is a daemonized version of Prettier for faster performance.
+					-- Make sure you have `prettierd` installed globally (`npm i -g @fsouza/prettierd`).
+					formatting.prettierd,
 
-					-- Only register eslint_d formatting if .eslintrc* is present
-					formatting.with({
-						condition = function(utils)
-							return utils.root_has_file({
-								".eslintrc",
-								".eslintrc.js",
-								".eslintrc.cjs",
-								".eslintrc.json",
-								".eslintrc.yaml",
-								".eslintrc.yml",
-							})
-						end,
-						filetypes = { "javascript", "typescript" },
-					}),
-
-					-- Prettier (conditionally enabled by presence of Prettier config)
-					null_ls.builtins.formatting.prettierd.with({
-						condition = function(utils)
-							return utils.root_has_file({
-								".prettierrc",
-								".prettierrc.js",
-								".prettierrc.json",
-								".prettierrc.yaml",
-								".prettierrc.yml",
-								"prettier.config.js",
-								"prettier.config.cjs",
-							})
-						end,
-					}),
+					-- For Lua file formatting
+					formatting.stylua,
 				},
 
-				-- on_attach = function(client, bufnr)
-				--   if client.supports_method("textDocument/formatting") then
-				--     local augroup = vim.api.nvim_create_augroup("LspFormatting", { clear = true })
-				--     vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-				--     vim.api.nvim_create_autocmd("BufWritePre", {
-				--       group = augroup,
-				--       buffer = bufnr,
-				--       callback = function()
-				--         vim.lsp.buf.format({ bufnr = bufnr, async = false })
-				--       end,
-				--     })
-				--   end
-				-- end,
-			})
-		end,
-	},
-
-	-- Prettier formatting
-	{
-		"MunifTanjim/prettier.nvim",
-		event = "BufWritePre", -- Auto-load when a buffer is written
-		config = function()
-			require("prettier").setup({
-				bin = "prettier",
-				filetypes = {
-					"css",
-					"graphql",
-					"html",
-					"javascript",
-					"javascriptreact",
-					"json",
-					"less",
-					"markdown",
-					"scss",
-					"typescript",
-					"typescriptreact",
-					"yaml",
-				},
-				cli_options = {
-					config_precedence = "prefer-file",
-				},
-			})
-		end,
-	},
-
-	-- StyLua for Lua formatting using null-ls
-	{
-		"nvimtools/none-ls.nvim",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
-		event = { "BufReadPre", "BufNewFile" },
-		config = function()
-			local null_ls = require("null-ls")
-			local b = null_ls.builtins
-
-			null_ls.setup({
-				sources = {
-					b.formatting.stylua.with({
-						filetypes = { "lua" },
-						-- Optional: Specify the Stylua binary if it's not in your PATH
-						-- bin = "/usr/local/bin/stylua",
-						-- Optional: Add extra arguments for StyLua if needed (e.g., config file)
-						-- args = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },
-					}),
-				},
-				-- Automatic formatting on save for none-ls sources (like StyLua)
+				-- The `on_attach` function is the recommended way to set up
+				-- format-on-save and other buffer-specific settings.
+				-- This function is called whenever none-ls attaches to a buffer.
 				on_attach = function(client, bufnr)
+					-- Check if the client attached to the buffer supports formatting.
 					if client.supports_method("textDocument/formatting") then
-						-- Create a named augroup to clear previous autocommands for this buffer
-						-- This prevents duplicate autocommands if on_attach is called multiple times for a buffer
-						vim.api.nvim_create_augroup("NoneLSPFormatting", { clear = true })
+						-- Create a command to allow manual formatting.
+						-- You can run it with `:Format`
+						vim.api.nvim_create_user_command("Format", function()
+							vim.lsp.buf.format({ bufnr = bufnr, async = true })
+						end, { desc = "Format current buffer with none-ls" })
+
+						-- Create an autocmd that will run the formatter on the buffer
+						-- before every write (`:w`).
 						vim.api.nvim_create_autocmd("BufWritePre", {
-							group = "NoneLSPFormatting",
 							buffer = bufnr,
 							callback = function()
-								vim.lsp.buf.format({ bufnr = bufnr, async = false })
+								-- The `vim.lsp.buf.format` function sends a request to the LSP client
+								-- to format the buffer. `none-ls` acts as an LSP client.
+								vim.lsp.buf.format({
+									bufnr = bufnr,
+									-- `async = true` makes it non-blocking.
+									async = true,
+									-- You can add a filter here to specify which formatters to use.
+									-- If you have multiple formatters, you can do:
+									-- filter = function(c) return c.name == "prettierd" end,
+								})
 							end,
 						})
 					end
+				end,
+			})
+		end,
+	},
+
+	-- Linting
+	{
+		"mfussenegger/nvim-lint",
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			local lint = require("lint")
+
+			-- Configure the linters you want to use.
+			-- We are using 'eslint_d' for its performance benefits.
+			-- Make sure you have it installed globally: npm install -g eslint_d
+			lint.linters_by_ft = {
+				javascript = { "eslint_d" },
+				typescript = { "eslint_d" },
+				javascriptreact = { "eslint_d" },
+				typescriptreact = { "eslint_d" },
+				-- You can add other linters for other filetypes here.
+				-- For example:
+				lua = { "luacheck" },
+			}
+
+			-- Create an autocmd to run linting on specific events.
+			-- This will run the linter automatically when you save a file,
+			-- open a file, or leave insert mode.
+			vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
+				group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
+				callback = function()
+					lint.try_lint()
 				end,
 			})
 		end,
@@ -206,9 +152,11 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
+			-- These are optional but recommended plugins that enhance the LSP experience.
 			{ "b0o/schemastore.nvim", lazy = true },
-			{ "williamboman/mason.nvim", config = true },
-			{ "williamboman/mason-lspconfig.nvim", config = true },
+			"williamboman/mason.nvim",
+			"williamboman/mason-lspconfig.nvim",
+			"hrsh7th/cmp-nvim-lsp",
 		},
 		event = { "BufReadPre", "BufNewFile" },
 		config = function()
@@ -224,14 +172,21 @@ return {
 				severity_sort = true,
 			})
 
+			-- Import lspconfig.
 			local lspconfig = require("lspconfig")
+			-- Import cmp_nvim_lsp for capabilities.
+			local capabilities =
+				require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-			-- Common on_attach function for format-on-save
-			local function common_on_attach(client, bufnr)
-				-- Crucially, disable document formatting capabilities for ALL LSP clients
-				-- This ensures that only none-ls (for StyLua) and prettier.nvim (for Prettier) handle formatting.
-				client.server_capabilities.documentFormattingProvider = false
-				client.server_capabilities.documentRangeFormattingProvider = false
+			-- This on_attach function will be used for all LSP servers.
+			-- It sets up keymaps and other buffer-local settings when a server attaches.
+			local on_attach = function(client, bufnr)
+				-- This is a best practice to prevent conflicts with none-ls.
+				-- It ensures that only none-ls provides formatting.
+				if client.supports_method("textDocument/formatting") then
+					client.server_capabilities.documentFormattingProvider = false
+					client.server_capabilities.documentRangeFormattingProvider = false
+				end
 
 				-- LSP Keymaps
 				local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -311,33 +266,33 @@ return {
 					vim.diagnostic.jump({ count = 1 })
 				end, vim.tbl_extend("force", opts, { desc = "Next Diagnostic" }))
 
-				-- Inlay hints toggle keymap (available for all LSP clients that support it)
+				-- Add a keymap for inlay hints if the server supports it.
 				if client.server_capabilities.inlayHintProvider then
-					keymap("n", "<leader>ih", function()
+					vim.keymap.set("n", "<leader>ih", function()
 						vim.lsp.inlay_hint.enable(
 							not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }),
 							{ bufnr = bufnr }
 						)
-					end, vim.tbl_extend("force", opts, { desc = "Toggle [I]nlay [H]ints" }))
+					end, { buffer = bufnr, desc = "Toggle Inlay Hints" })
 				end
 			end
 
-			local capabilities = vim.tbl_deep_extend(
-				"force",
-				vim.lsp.protocol.make_client_capabilities(),
-				require("cmp_nvim_lsp").default_capabilities()
-			)
-
 			-- Angular Language Server
 			lspconfig.angularls.setup({
-				on_attach = common_on_attach,
+				on_attach = on_attach,
 				capabilities = capabilities,
 				root_dir = lspconfig.util.root_pattern("angular.json", "tsconfig.json", ".git"),
-				init_options = {
+				settings = {
 					typescript = {
-						preferences = {
-							-- Disable TypeScript completions from Angular LS to avoid duplicates
-							disableSuggestions = true,
+						experimental = {
+							-- This is crucial for allowing the server to find component templates.
+							resolveNonTsPathExtension = true,
+						},
+					},
+					html = {
+						experimental = {
+							-- This enables parsing of Angular's unique binding syntax in templates.
+							parseAngularBinding = true,
 						},
 					},
 				},
@@ -345,28 +300,23 @@ return {
 
 			-- TypeScript Server
 			lspconfig.ts_ls.setup({
-				on_attach = function(client, bufnr)
-					vim.api.nvim_buf_set_option(bufnr, "formatexpr", "")
-					common_on_attach(client, bufnr)
-
-					-- Enable inlay hints if supported
-					if client.server_capabilities.inlayHintProvider then
-						vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
-					end
-				end,
+				on_attach = on_attach,
 				capabilities = capabilities,
-				root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", ".git"),
+				root_dir = lspconfig.util.root_pattern("tsconfig.json", "package.json", ".git"),
 				settings = {
+					completions = {
+						-- When selecting a function from the completion menu, automatically add parentheses
+						completeFunctionCalls = true,
+					},
+					suggest = {
+						-- Enables suggestions for symbols that can be auto-imported
+						autoImports = true,
+					},
 					typescript = {
 						inlayHints = {
 							includeInlayParameterNameHints = "all",
-							includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-							includeInlayFunctionParameterTypeHints = true,
 							includeInlayVariableTypeHints = true,
-							includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-							includeInlayPropertyDeclarationTypeHints = true,
 							includeInlayFunctionLikeReturnTypeHints = true,
-							includeInlayEnumMemberValueHints = true,
 						},
 					},
 				},
@@ -374,13 +324,27 @@ return {
 
 			-- CSS Language Server
 			lspconfig.cssls.setup({
-				on_attach = common_on_attach,
+				on_attach = on_attach,
 				capabilities = capabilities,
+				settings = {
+					css = {
+						-- Enable validation to get linting diagnostics.
+						validate = true,
+						lint = {
+							-- Warn about duplicate properties.
+							duplicateProperties = "warning",
+							-- Warn about empty rulesets.
+							emptyRules = "warning",
+							-- Warn about using vendor-specific prefixes.
+							vendorPrefix = "warning",
+						},
+					},
+				},
 			})
 
 			-- JSON Language Server
 			lspconfig.jsonls.setup({
-				on_attach = common_on_attach,
+				on_attach = on_attach,
 				capabilities = capabilities,
 				settings = {
 					json = {
@@ -392,7 +356,7 @@ return {
 
 			-- Tailwind CSS Language Server
 			lspconfig.tailwindcss.setup({
-				on_attach = common_on_attach,
+				on_attach = on_attach,
 				capabilities = capabilities,
 				root_dir = lspconfig.util.root_pattern(
 					"tailwind.config.js",
@@ -401,11 +365,14 @@ return {
 					"package.json",
 					".git"
 				),
+				-- guarantees that you get Tailwind CSS completions and diagnostics inside
+				-- your Angular HTML templates (.html), component files (.ts), and stylesheets (.scss)
+				filetypes = { "angular", "html", "typescript", "javascript", "css", "scss" },
 			})
 
 			-- Lua Language Server
 			lspconfig.lua_ls.setup({
-				on_attach = common_on_attach,
+				on_attach = on_attach,
 				capabilities = capabilities,
 				settings = {
 					Lua = {
@@ -417,32 +384,6 @@ return {
 							checkThirdParty = false,
 						},
 					},
-				},
-			})
-
-			-- ESLint Language Server for diagnostics
-			lspconfig.eslint.setup({
-				on_attach = common_on_attach,
-				capabilities = capabilities,
-				settings = {
-					workingDirectories = { mode = "auto" },
-					format = false, -- Ensure ESLint's own formatter is off
-				},
-				root_dir = lspconfig.util.root_pattern(
-					".eslintrc.js",
-					".eslintrc.cjs",
-					".eslintrc.json",
-					"package.json"
-				),
-				filetypes = {
-					"javascript",
-					"javascriptreact",
-					"typescript",
-					"typescriptreact",
-					"vue",
-					"html",
-					"json",
-					"yaml", -- Add filetypes ESLint should lint
 				},
 			})
 		end,
