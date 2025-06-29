@@ -17,7 +17,7 @@ vim.opt.history = 500      -- Number of commands to remember
 vim.opt.hidden = true      -- Allow buffers to be hidden without saving
 
 -- File Handling
-vim.opt.confirm = true                                 -- If operation will fail, ask if you wish to save
+-- vim.opt.confirm = true                                 -- If operation will fail, ask if you wish to save
 vim.opt.backup = false                                 -- Don't create backup files
 vim.opt.writebackup = false                            -- Don't backup before overwriting
 vim.opt.swapfile = false                               -- Don't create swap files
